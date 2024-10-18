@@ -1,50 +1,50 @@
 from django.db import models
-from accounts.models import Account
+from accounts.models import Profile
 
 class Post(models.Model):
-    account = models.ForeignKey(Account, on_delete=models.CASCADE)
+    profile = models.ForeignKey(Profile, on_delete=models.CASCADE)
     # TODO: Implementar Markdown en los posts, evaluar el tamaño máximo de caracteres
     content = models.TextField(max_length=1024)
     created_at = models.DateTimeField(auto_now_add=True)
-    # Indicaría si el post es comentario de otro post
-    parent_post = models.ForeignKey("self", null=True, blank=True, on_delete=models.CASCADE)
-    # Indicaría si el post es un "retuit" o repost
-    shared_post = models.ForeignKey("self", null=True, blank=True, on_delete=models.CASCADE)
+    # Indicaría si el post es comentario de otro post, tendría una referencia al post comentado
+    parent = models.ForeignKey("self", null=True, blank=True, on_delete=models.CASCADE)
+    # Indicaría si el post es un "retuit" o repost, tendría una referencia al post compartido
+    share = models.ForeignKey("self", null=True, blank=True, related_name="shares", on_delete=models.CASCADE)
     # TODO: Evaluar si se puede agregar imagenes
-    # image = models.ImageField(upload_to="posts/images/", null=True, blank=True)
+    image = models.ImageField(upload_to="posts/images/", null=True, blank=True)
     likes_count = models.PositiveIntegerField(default=0)
     shares_count = models.PositiveIntegerField(default=0)
     comments_count = models.PositiveIntegerField(default=0)
     
     def is_comment(self):
         """Valida si el post es un comentario"""
-        return self.parent_post is not None
+        return self.parent is not None
 
     def is_shared(self):
         """Valida si el post es compartido de otro post"""
-        return self.shared_post is not None
+        return self.share is not None
     
     def save(self, *args, **kwargs):
         """Sobrescribir el método save para manejar la lógica de compartidos y comentarios."""
         super().save(*args, **kwargs)
 
-        if self.parent_post:
-            self.parent_post.comments_count += 1
-            self.parent_post.save()
+        if self.parent:
+            self.parent.comments_count += 1
+            self.parent.save()
 
-        if self.shared_post:
-            self.shared_post.shares_count += 1
-            self.shared_post.save()
+        if self.share:
+            self.share.shares_count += 1
+            self.share.save()
 
     def delete(self, *args, **kwargs):
         """Sobrescribir el método delete para manejar la lógica de eliminación de comentarios."""
-        if self.parent_post:
-            self.parent_post.comments_count -= 1
-            self.parent_post.save()
+        if self.parent:
+            self.parent.comments_count -= 1
+            self.parent.save()
 
-        if self.shared_post:
-            self.shared_post.shares_count -= 1
-            self.shared_post.save()
+        if self.share:
+            self.share.shares_count -= 1
+            self.share.save()
 
         super().delete(*args, **kwargs)
     
@@ -52,7 +52,7 @@ class Post(models.Model):
         return f"Post by {self.author.user.username}: {self.content[:50]}"
 
 class Like(models.Model):
-    account = models.ForeignKey(Account, on_delete=models.CASCADE)
+    profile = models.ForeignKey(Profile, on_delete=models.CASCADE)
     post = models.ForeignKey(Post, on_delete=models.CASCADE)
     created_at = models.DateTimeField(auto_now_add=True)
     
