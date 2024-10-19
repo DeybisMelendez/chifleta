@@ -1,0 +1,38 @@
+{% extends "layouts/base.html" %}
+{% block title %}Registro de usuario{% endblock title %}
+{% block content %}
+<main>
+  <form method="post">
+    {% csrf_token %}
+    
+    <div>
+      <label for="username">Usuario</label>
+      <input type="text" name="username" placeholder="Ingresa un nombre de usuario" required>
+    </div>
+
+    <div>
+      <label for="first_name">Nombre</label>
+      <input type="text" name="first_name" placeholder="Ingresa tu nombre" required>
+    </div>
+
+    <div>
+      <label for="last_name">Apellido</label>
+      <input type="text" name="first_name" placeholder="Ingresa tu apellido" required>
+    </div>
+
+    <div>
+      <label for="password1">Contraseña</label>
+      <input type="password" name="password1" placeholder="Ingresa tu contraseña" required>
+    </div>
+
+    <div>
+      <label for="password2">Confirmar Contraseña</label>
+      <input type="password" name="password2" placeholder="Confirma tu contraseña" required>
+    </div>
+    
+    <button type="submit">Crear usuario</button>
+  </form>
+  <p>¿Ya tienes una cuenta? <a href="{% url 'login' %}">Inicia Sesión aquí</a></p>
+
+</main>
+{% endblock content %}
