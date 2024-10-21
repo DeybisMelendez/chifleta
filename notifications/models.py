@@ -1,5 +1,5 @@
 from django.db import models
-from accounts.models import Account
+from accounts.models import Profile
 from posts.models import Post
 
 class Notification(models.Model):
@@ -10,7 +10,7 @@ class Notification(models.Model):
         ('follow', 'Follow'),
     ]
     
-    account = models.ForeignKey(Account, on_delete=models.CASCADE)
+    profile = models.ForeignKey(Profile, on_delete=models.CASCADE)
     notification_type = models.CharField(max_length=10, choices=NOTIFICATION_TYPES)
     post = models.ForeignKey(Post, null=True, blank=True, on_delete=models.CASCADE)
     created_at = models.DateTimeField(auto_now_add=True)
