@@ -18,13 +18,13 @@ from django.contrib import admin
 from django.urls import path
 from django.conf import settings
 from django.conf.urls.static import static
-from accounts.views import register, user, login
+from accounts.views import register, user, log_in
 
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('register/', register, name="register"),
     path('user/<str:username>/', user, name="user"),
-    path('login/', login, name="login")
+    path('login/', log_in, name="login")
     
 ]
 
