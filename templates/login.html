@@ -1,23 +1,38 @@
 {% extends "layouts/base.html" %}
-{% block title %}Inicio de sesión{% endblock title %}
+{% load static %}
+
+{% block title %}
+  Inicio de sesión
+{% endblock title %}
+
+{% block styles %}
+  {{ block.super }}
+  <link rel="stylesheet" href="{% static 'css/login.css' %}">
+{% endblock styles %}
+
 {% block content %}
-<main>
-  <form method="post">
-    {% csrf_token %}
+<main class="container">
+  <article class="login">
+    <form class="login__form" method="post">
+      <h1 class="login__title">Inicio de Sesión</h1>
+      {% csrf_token %}
+      <div class="login__field">
+        <label class="login__label" for="username">Usuario</label>
+        <input class="login__input" type="text" name="username" placeholder="Ingresa tu usuario" required>
+      </div>
+      
+      <div class="login__field">
+        <label class="login__label" for="password">Contraseña</label>
+        <input class="login__input" type="password" name="password" placeholder="Ingresa tu contraseña" required>
+      </div>
+      
+      <button class="login__submit" type="submit">Iniciar sesión</button>
+    </form>
     
-    <div>
-      <label for="username">Usuario</label>
-      <input type="text" name="username" placeholder="Ingresa tu usuario" required>
-    </div>
-    
-    <div>
-      <label for="password">Contraseña</label>
-      <input type="password" name="password" placeholder="Ingresa tu contraseña" required>
-    </div>
-    
-    <button type="submit">Iniciar sesión</button>
-  </form>
-  
-  <p>¿No tienes una cuenta? <a href="{% url 'register' %}">Regístrate aquí</a></p>
+    <p class="login__register">
+      ¿No tienes una cuenta?
+      <a class="login__register-link" href="{% url 'register' %}">Regístrate aquí</a>
+    </p>
+  </article>
 </main>
 {% endblock content %}

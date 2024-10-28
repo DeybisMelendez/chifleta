@@ -1,6 +1,6 @@
 {% extends "layouts/base.html" %}
-{% block title %}{{username}}{% endblock title %}
-{% block content %}
+{% load static %}
+
 {% comment %}
   Contexto:
   str username
@@ -11,9 +11,18 @@
   int follower_count
   int following_count
 {% endcomment %}
-<main>
-  <section>
-    <a href="{% url 'delete_user' %}">delete_user</a>
+
+{% block title %}
+  Registro de usuario
+{% endblock title %}
+
+{% block styles %}
+  {{ block.super }}
+  <link rel="stylesheet" href="{% static 'css/user.css' %}">
+{% endblock styles %}
+{% block content %}
+<main class="container">
+  <section class="user">
     <div>
       <div>
         <h1>{{first_name}} {{last_name}}</h1>
@@ -31,7 +40,7 @@
     {% endcomment %}
     <a href="#">Editar perfil</a>
   </section>
-  <section>
+  <section class="user-posts">
     {% comment %}
       TODO: Agregar posts del usuario
     {% endcomment %}
