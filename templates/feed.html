@@ -1,0 +1,36 @@
+{% extends "layouts/base.html" %}
+{% load static %}
+
+{% comment %}
+  Nota: asegurarse que los posts sean padres y no hijos!!!
+  Contexto:
+  list posts -> ordenado por fecha, cada post debe contener la información del modelo Post
+{% endcomment %}
+
+{% block title %}
+  Feed
+{% endblock title %}
+
+{% block styles %}
+{% endblock styles %}
+
+{% block content %}
+<main>
+  <section>
+  {% for post in posts %}
+    <a href="{% url 'post' post.id %}">
+      <div>
+        <h1>{{post.profile.user}}</h1>
+        <p>{{post.created_at}}</p>
+      </div>
+      <p>{{post.content}}</p>
+      <div>
+        <p>comments: {{post.comments_count}}</p>
+        <p>likes: {{post.likes_count}}</p>
+        <p>shares: {{post.shares_count}}</p>
+      </div>
+    </a>
+  {% endfor %}
+  </section>
+</main>
+{% endblock content %}
