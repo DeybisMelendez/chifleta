@@ -49,7 +49,7 @@ class Post(models.Model):
         super().delete(*args, **kwargs)
     
     def __str__(self):
-        return f"Post by {self.author.user.username}: {self.content[:50]}"
+        return f"Post by {self.profile.user.username}: {self.content[:50]}"
 
 class Like(models.Model):
     profile = models.ForeignKey(Profile, on_delete=models.CASCADE)
@@ -68,7 +68,7 @@ class Like(models.Model):
         super().delete(*args, **kwargs)
     
     def __str__(self):
-        return f"{self.account.user.username} liked {self.post.content[:50]}"
+        return f"{self.profile.user.username} liked {self.post.content[:50]}"
     # TODO: Evaluar si es necesario agregar mas información al like
     
 # TODO Evaluar si vale la pena agregar Dislike o utilizar la misma clase para likes negativos
