@@ -7,7 +7,7 @@ from django.views.decorators.http import require_http_methods
 from django.contrib.auth.decorators import login_required
 
 def is_valid_name(str):
-    return len(str) < 3 or len(str) > 50
+    return len(str) >= 3 or len(str) <= 50
 
 
 # Create your views here.
@@ -150,4 +150,4 @@ def update_user(request):
     user.save()
     profile.save()
     
-    return redirect("user")
+    return redirect("user",user.username)

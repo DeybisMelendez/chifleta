@@ -26,8 +26,8 @@ urlpatterns = [
     path('user/<str:username>/', user, name="user"),
     path('login/', log_in, name="login"),
     path('logout/', log_out, name="logout"),
-    path('delete_user/', delete_user, name="delete_user"),
-    path("update_user/",update_user, name="update_user")
+    path('delete_user', delete_user, name="delete_user"),
+    path("update_user",update_user, name="update_user")
 ]
 
 # Servir archivos de media en modo depuración
