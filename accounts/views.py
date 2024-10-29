@@ -103,7 +103,7 @@ def log_in(request):
 
 
 @login_required(redirect_field_name="login")
-@require_http_methods(["POST"])
+@require_http_methods(["GET"])
 def log_out(request):
     
     logout(request)
