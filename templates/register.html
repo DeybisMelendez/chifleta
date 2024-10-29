@@ -6,51 +6,51 @@
 {% endblock title %}
 
 {% block styles %}
-  {{ block.super }}
-  <link rel="stylesheet" href="{% static 'css/login.css' %}">
+  <link rel="stylesheet" href="{% static 'css/error.css' %}" >
+  <link rel="stylesheet" href="{% static 'css/form.css' %}" >
 {% endblock styles %}
 
 {% block content %}
-<main class="container">
-  <article class="register">
-    <form class="register__form" method="post">
-      {% csrf_token %}
-      
-      <div class="register__field">
-        <label class="register__label" for="username">Usuario</label>
-        <input class="register__input" type="text" name="username" placeholder="Ingresa un nombre de usuario" required>
+<main>
+  {% include "includes/error.html" %}
+  <form class="form" method="post">
+    <h1 class="form__title">Registro de usuario</h1>
+    {% csrf_token %}
+    
+    <div class="form__field">
+      <label class="form__label" for="username">Usuario</label>
+      <input class="form__input" type="text" name="username" placeholder="Ingresa un nombre de usuario" required>
+    </div>
+
+    <div class="form__group">
+      <div class="form__field">
+        <label class="form__label" for="first_name">Nombre</label>
+        <input class="form__input" type="text" name="first_name" placeholder="Ingresa tu nombre" required>
+      </div>
+
+      <div class="form__field">
+        <label class="form__label" for="last_name">Apellido</label>
+        <input class="form__input" type="text" name="first_name" placeholder="Ingresa tu apellido" required>
+      </div>
+    </div>
+
+    <div class="form__group">
+      <div class="form__field">
+        <label class="form__label" for="password1">Contraseña</label>
+        <input class="form__input" type="password" name="password1" placeholder="Ingresa tu contraseña" required>
       </div>
   
-      <div class="register__group">
-        <div class="register__field">
-          <label class="register__label" for="first_name">Nombre</label>
-          <input class="register__input" type="text" name="first_name" placeholder="Ingresa tu nombre" required>
-        </div>
-    
-        <div class="register__field">
-          <label class="register__label" for="last_name">Apellido</label>
-          <input class="register__input" type="text" name="first_name" placeholder="Ingresa tu apellido" required>
-        </div>
+      <div class="form__field">
+        <label class="form__label" for="password2">Confirmar Contraseña</label>
+        <input class="form__input" type="password" name="password2" placeholder="Confirma tu contraseña" required>
       </div>
-  
-      <div class="register__group">
-        <div class="register__field">
-          <label class="register__label" for="password1">Contraseña</label>
-          <input class="register__input" type="password" name="password1" placeholder="Ingresa tu contraseña" required>
-        </div>
+    </div>
     
-        <div class="register__field">
-          <label class="register__label" for="password2">Confirmar Contraseña</label>
-          <input class="register__input" type="password" name="password2" placeholder="Confirma tu contraseña" required>
-        </div>
-      </div>
-      
-      <button class="register__submit" type="submit">Crear usuario</button>
-    </form>
-    <p class="register__login">
+    <button class="form__submit" type="submit">Crear usuario</button>
+    <p class="form__question">
       ¿Ya tienes una cuenta?
-      <a class="register__login-link" href="{% url 'login' %}">Inicia Sesión aquí</a>
+      <a class="form__question-link" href="{% url 'login' %}">Inicia Sesión aquí</a>
     </p>
-  </article>
+  </form>
 </main>
 {% endblock content %}

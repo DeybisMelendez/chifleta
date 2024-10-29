@@ -1,0 +1,9 @@
+{% if error %}
+<div class="error" x-data="{open:true}" x-show="open">
+  <p class="error__content">
+    <strong>Error:</strong>
+    {{ error }}
+    <span class="error__close" @click="open = false"><i class="material-icons">close</i></span>
+  </p>
+</div>
+{% endif %}
