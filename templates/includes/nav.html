@@ -1,5 +1,14 @@
-<nav>
-  {% comment %}
-  TODO: Agregar navbar
-  {% endcomment %}
+<nav class="nav">
+  <a class="nav__brand" href="/">Chifleta</a>
+  <ul class="nav__menu">
+    {% if request.user.is_authenticated %}
+    <li class="nav__item"><a class="nav__link" href="#"><i class="material-icons">add</i></a></li>
+    <li class="nav__item"><a class="nav__link" href="#"><i class="material-icons">home</i></a></li>
+    <li class="nav__item"><a class="nav__link" href="{% url 'user' user.username %}"><i class="material-icons">person</i></a></li>
+    <li class="nav__item"><a class="nav__link" href="{% url 'logout' %}"><i class="material-icons">logout</i></a></li>
+    {% else %}
+    <li class="nav__item"><a class="nav__link" href="{% url 'login' %}">Login</a></li>
+    <li class="nav__item"><a class="nav__link" href="{% url 'register' %}">Register</a></li>
+    {% endif %}
+  </ul>
 </nav>

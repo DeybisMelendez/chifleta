@@ -1,0 +1,22 @@
+.nav {
+  border-bottom: 1px solid #999;
+  padding: 10px;
+  display: flex;
+  justify-content: space-between;
+}
+.nav__brand {
+  color: #111;
+  text-decoration: none;
+  color: #45e;
+}
+.nav__menu {
+  display: flex;
+}
+.nav__item {
+  margin-left: 20px;
+  list-style: none;
+}
+.nav__link {
+  color: #111;
+  text-decoration: none;
+}

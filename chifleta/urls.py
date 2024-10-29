@@ -18,7 +18,7 @@ from django.contrib import admin
 from django.urls import path
 from django.conf import settings
 from django.conf.urls.static import static
-from accounts.views import register, user, log_in, log_out, delete_user
+from accounts.views import register, user, log_in, log_out, delete_user,update_user
 
 urlpatterns = [
     path('admin/', admin.site.urls),
@@ -26,8 +26,8 @@ urlpatterns = [
     path('user/<str:username>/', user, name="user"),
     path('login/', log_in, name="login"),
     path('logout/', log_out, name="logout"),
-    path('delete_user/', delete_user, name="delete_user")
-    
+    path('delete_user/', delete_user, name="delete_user"),
+    path("update_user/",update_user, name="update_user")
 ]
 
 # Servir archivos de media en modo depuración

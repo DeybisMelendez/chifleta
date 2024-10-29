@@ -1,0 +1,36 @@
+.form {
+  display: flex;
+  flex-direction: column;
+  padding: 20px;
+}
+
+.form__title {
+  text-align: center;
+  font-weight: 600;
+  font-size: 1.5rem;
+}
+.form__field {
+  width: 100%;
+  margin-bottom: 12px;
+}
+.form__label {
+  margin-bottom: 4px;
+}
+.form__input {
+  width: 100%;
+  background-color: #ddd;
+  padding: 18px;
+  border-radius: 12px;
+}
+.form__submit {
+  width: 100%;
+  background-color: #111;
+  padding: 20px;
+  border-radius: 12px;
+  color: #eee;
+  margin-bottom: 20px;
+}
+.form__question-link {
+  color: #19e;
+  text-decoration: none;
+}

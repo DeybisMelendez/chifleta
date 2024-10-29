@@ -13,32 +13,58 @@
 {% endcomment %}
 
 {% block title %}
-  Registro de usuario
+  {{username}}
 {% endblock title %}
 
 {% block styles %}
-  {{ block.super }}
   <link rel="stylesheet" href="{% static 'css/user.css' %}">
+  <link rel="stylesheet" href="{% static 'css/modal.css' %}">
+  <link rel="stylesheet" href="{% static 'css/form.css' %}">
+  <link rel="stylesheet" href="{% static 'css/error.css' %}">
 {% endblock styles %}
 {% block content %}
-<main class="container">
+<main>
+  {% if request.user.is_authenticated %}
+    {% include "includes/error.html" %}
+  {% endif %}
   <section class="user">
-    <div>
-      <div>
-        <h1>{{first_name}} {{last_name}}</h1>
-        <p>{{username}}</p>
+    <div class="user__info">
+      <h1 class="user__username">{{username}}</h1>
+      <h2 class="user__fullname">{{first_name}} {{last_name}}</h2>
+      <p class="user__bio"><em>{{bio}}</em></p>
+    </div>
+    <div class="user__followers">
+      <p class="user__follower-count"><strong>{{followers_count}}</strong> seguidores</p>
+      <p class="user__follower-count"><strong>{{following_count}}</strong> seguidos</p>
+    </div>
+    {% if request.user.is_authenticated %}
+    <div x-data="{open:false}">
+      <button class="user__edit" type="button" @click="open=true">Editar perfil</button>
+      <div class="modal" x-show="open">
+        <div class="modal__content">
+          <span class="modal__close" @click="open=false"><i class="material-icons">close</i></span>
+          <form class="form" method="post" action="/update_user">
+            <h1 class="form__title">Editar usuario</h1>
+            {% csrf_token %}
+            <div class="form__field">
+              <label class="form__label" for="first_name">Nombre</label>
+              <input class="form__input" type="text" name="first_name" value="{{first_name}}" required>
+            </div>
+            <div class="form__field">
+              <label class="form__label" for="lastname_name">Apellido</label>
+              <input class="form__input" type="text" name="last_name" value="{{last_name}}" required>
+            </div>
+            <div class="form__field">
+              <label class="form__label" for="bio">Bio</label>
+              <input class="form__input" type="text" name="bio" value="{{bio}}" required>
+            </div>
+            <button class="form__submit" type="submit">Guardar</button>
+          </form>
+        </div>
       </div>
-      <img src="/media/{{avatar}}">
     </div>
-    <p>{{bio}}</p>
-    <div>
-      <p>Seguidores {{follower_count}}</p>
-      <p>Seguidos {{following_count}}</p>
-    </div>
-    {% comment %}
-      TODO: Agregar url para user update
-    {% endcomment %}
-    <a href="#">Editar perfil</a>
+    
+    {% endif %}
   </section>
   <section class="user-posts">
     {% comment %}

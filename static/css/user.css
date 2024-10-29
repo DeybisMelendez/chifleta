@@ -1,0 +1,29 @@
+.user {
+  border-bottom: 1px solid #999;
+  padding: 20px;
+}
+.user__info {
+  margin-bottom: 20px;
+}
+.user__username {
+  font-size: 2rem;
+  font-weight: 800;
+}
+.user__fullname {
+  font-size: 1.5rem;
+  font-weight: 400;
+}
+.user__followers {
+  display: flex;
+  margin-bottom: 20px;
+}
+.user__follower-count {
+  padding: 8px;
+}
+.user__edit {
+  width: 100;
+  padding: 18px;
+  background-color: #111;
+  color: #eee;
+  border-radius: 12px;
+}

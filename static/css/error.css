@@ -1,0 +1,10 @@
+.error {
+  background-color: #d55;
+  padding: 20px;
+  border-bottom: 1px solid #999;
+  color: #eee;
+}
+.error__close {
+  float: right;
+  cursor: pointer;
+}
