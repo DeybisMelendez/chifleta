@@ -8,6 +8,9 @@
   <link rel="stylesheet" href="{% static 'css/reset.css' %}">
   <link rel="stylesheet" href="{% static 'css/base.css' %}">
   <link rel="stylesheet" href="{% static 'css/nav.css' %}">
+  <link rel="stylesheet" href="{% static 'css/modal.css' %}">
+  <link rel="stylesheet" href="{% static 'css/form.css' %}">
+  <link rel="stylesheet" href="{% static 'css/error.css' %}">
   <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
   {% block styles %}
   {% endblock styles %}
@@ -19,6 +22,7 @@
   <div class="container">
     {% include "includes/nav.html" %}
     {% block content %}{% endblock content %}
+    {% include "includes/footer.html" %}
   </div>
   <script src="https://unpkg.com/htmx.org@2.0.3" defer></script>
 </body>

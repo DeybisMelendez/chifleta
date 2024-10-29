@@ -1,6 +1,6 @@
 .user {
-  border-bottom: 1px solid #999;
-  padding: 20px;
+  border-bottom: var(--visible-border);
+  padding: var(--padding-base);
 }
 .user__info {
   margin-bottom: 20px;
@@ -26,4 +26,8 @@
   background-color: #111;
   color: #eee;
   border-radius: 12px;
+  transition: var(--transition-base);
+}
+.user__edit:hover {
+  background-color: var(--primary-color);
 }

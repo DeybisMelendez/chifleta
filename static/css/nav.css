@@ -1,13 +1,12 @@
 .nav {
-  border-bottom: 1px solid #999;
-  padding: 10px;
+  border-bottom: var(--visible-border);
+  padding: 20px;
   display: flex;
   justify-content: space-between;
 }
 .nav__brand {
-  color: #111;
-  text-decoration: none;
-  color: #45e;
+  font-weight:bold;
+  color: var(--primary-color);
 }
 .nav__menu {
   display: flex;
@@ -17,6 +16,10 @@
   list-style: none;
 }
 .nav__link {
-  color: #111;
+  color: var(--black-color);
   text-decoration: none;
+  transition: var(--transition-base);
+}
+.nav__link:hover {
+  color: var(--primary-color);
 }

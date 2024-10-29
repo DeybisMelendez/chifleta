@@ -11,6 +11,7 @@ def feed(request):
     user = request.user
     profile = Profile.objects.get(user = user)
     followeds = Follow.objects.filter(follower = profile)
+    #TODO: Optimizar cantidad de posts a enviar
     posts = 0
     for followed in followeds:
         if posts == 0:

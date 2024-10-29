@@ -1,14 +1,49 @@
-<nav class="nav">
-  <a class="nav__brand" href="/">Chifleta</a>
+<nav class="nav" x-data="{open:false}">
+  <p class="nav__brand">Chifleta</p>
   <ul class="nav__menu">
     {% if request.user.is_authenticated %}
-    <li class="nav__item"><a class="nav__link" href="#"><i class="material-icons">add</i></a></li>
-    <li class="nav__item"><a class="nav__link" href="#"><i class="material-icons">home</i></a></li>
-    <li class="nav__item"><a class="nav__link" href="{% url 'user' user.username %}"><i class="material-icons">person</i></a></li>
-    <li class="nav__item"><a class="nav__link" href="{% url 'logout' %}"><i class="material-icons">logout</i></a></li>
+    <li class="nav__item">
+      <a class="nav__link" href="#" @click="open=true">
+        <i class="material-icons">add</i>
+      </a>
+    </li>
+    <li class="nav__item">
+      <a class="nav__link" href="{% url 'feed' %}">
+        <i class="material-icons">home</i>
+      </a>
+    </li>
+    <li class="nav__item">
+      <a class="nav__link" href="{% url 'user' user.username %}">
+        <i class="material-icons">person</i>
+      </a>
+    </li>
+    <li class="nav__item">
+      <a class="nav__link" href="{% url 'logout' %}">
+        <i class="material-icons">logout</i>
+      </a>
+    </li>
     {% else %}
-    <li class="nav__item"><a class="nav__link" href="{% url 'login' %}">Login</a></li>
-    <li class="nav__item"><a class="nav__link" href="{% url 'register' %}">Register</a></li>
+    <li class="nav__item">
+      <a class="nav__link" href="{% url 'login' %}">Login</a>
+    </li>
+    <li class="nav__item">
+      <a class="nav__link" href="{% url 'register' %}">Register</a>
+    </li>
     {% endif %}
   </ul>
+  {% if request.user.is_authenticated %}
+  <div class="modal" x-show="open">
+    <div class="modal__content">
+      <span class="modal__close" @click="open=false"><i class="material-icons">close</i></span>
+      <form class="form" method="post" action="{% url 'add_post' %}">
+        <h1 class="form__title">Nuevo post</h1>
+        {% csrf_token %}
+        <div class="form__field">
+          <textarea class="form__input" type="text" name="content" placeholder="¿Qué novedades tienes?" required></textarea>
+        </div>
+        <button class="form__submit" type="submit">Publicar</button>
+      </form>
+    </div>
+  </div>
+  {% endif %}
 </nav>

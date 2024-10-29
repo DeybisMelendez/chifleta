@@ -18,10 +18,9 @@
 
 {% block styles %}
   <link rel="stylesheet" href="{% static 'css/user.css' %}">
-  <link rel="stylesheet" href="{% static 'css/modal.css' %}">
-  <link rel="stylesheet" href="{% static 'css/form.css' %}">
-  <link rel="stylesheet" href="{% static 'css/error.css' %}">
+  <link rel="stylesheet" href="{% static 'css/posts.css' %}">
 {% endblock styles %}
+
 {% block content %}
 <main>
   {% if request.user.is_authenticated %}
@@ -31,7 +30,7 @@
     <div class="user__info">
       <h1 class="user__username">{{username}}</h1>
       <h2 class="user__fullname">{{first_name}} {{last_name}}</h2>
-      <p class="user__bio"><em>{{bio}}</em></p>
+      <pre class="user__bio">{{bio}}</pre>
     </div>
     <div class="user__followers">
       <p class="user__follower-count"><strong>{{followers_count}}</strong> seguidores</p>
@@ -48,15 +47,15 @@
             {% csrf_token %}
             <div class="form__field">
               <label class="form__label" for="first_name">Nombre</label>
-              <input class="form__input" type="text" name="first_name" value="{{first_name}}" required>
+              <input class="form__input" type="text" name="first_name" placeholder="Escribe un nombre" value="{{first_name}}" required>
             </div>
             <div class="form__field">
               <label class="form__label" for="lastname_name">Apellido</label>
-              <input class="form__input" type="text" name="last_name" value="{{last_name}}" required>
+              <input class="form__input" type="text" name="last_name" placeholder="Escribe un apellido" value="{{last_name}}" required>
             </div>
             <div class="form__field">
               <label class="form__label" for="bio">Bio</label>
-              <input class="form__input" type="text" name="bio" value="{{bio}}" required>
+              <textarea class="form__input" type="text" name="bio"placeholder="Escribe una biografía" value="{{bio}}" required></textarea>
             </div>
             <button class="form__submit" type="submit">Guardar</button>
           </form>
@@ -66,10 +65,15 @@
     
     {% endif %}
   </section>
-  <section class="user-posts">
-    {% comment %}
-      TODO: Agregar posts del usuario
-    {% endcomment %}
+  
+  <section class="posts">
+    {% if posts %}
+      {% for post in posts %}
+        {% include "includes/post.html" %}
+      {% endfor %}
+    {% else %}
+    <p class="posts__empty">No hay posts para mostrar.</p>
+    {% endif %}
   </section>
 </main>
 {% endblock content %}

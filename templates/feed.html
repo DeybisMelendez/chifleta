@@ -12,25 +12,19 @@
 {% endblock title %}
 
 {% block styles %}
+  <link rel="stylesheet" href="{% static 'css/posts.css' %}">
 {% endblock styles %}
 
 {% block content %}
 <main>
-  <section>
-  {% for post in posts %}
-    <a href="{% url 'post' post.id %}">
-      <div>
-        <h1>{{post.profile.user}}</h1>
-        <p>{{post.created_at}}</p>
-      </div>
-      <p><pre>{{post.content}}</pre></p>
-      <div>
-        <p>comments: {{post.comments_count}}</p>
-        <p>likes: {{post.likes_count}}</p>
-        <p>shares: {{post.shares_count}}</p>
-      </div>
-    </a>
-  {% endfor %}
+  <section class="posts">
+    {% if posts %}
+      {% for post in posts %}
+        {% include "includes/post.html" %}
+      {% endfor %}
+    {% else %}
+    <p class="posts__empty">No hay posts para mostrar.</p>
+    {% endif %}
   </section>
 </main>
 {% endblock content %}

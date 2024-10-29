@@ -1,13 +1,27 @@
+:root {
+  --visible-border: 1px solid #999;
+  --padding-base: 40px;
+  --black-color: #111;
+  --white-color: #eee;
+  --primary-color: #45e;
+  --secondary-color: #19e;
+  --error-color: #d55;
+  --transition-base: all 0.3s ease-in-out;
+}
+
 body {
-  background-color: #eee;
+  background-color: var(--white-color);
 }
 
 .container {
   max-width: 800px;
   min-height: 100vh;
   margin: auto;
-  /*padding-left: 20px;
-  padding-right: 20px;*/
-  border-left: 1px solid #999;
-  border-right: 1px solid #999;
+  border-left: var(--visible-border);
+  border-right: var(--visible-border);
+}
+
+.footer {
+  padding: var(--padding-base);
+  text-align: center;
 }

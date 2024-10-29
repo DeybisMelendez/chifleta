@@ -1,26 +1,31 @@
 .form {
   display: flex;
   flex-direction: column;
-  padding: 20px;
+  padding: var(--padding-base);
+  border-bottom: var(--visible-border);
 }
 
 .form__title {
   text-align: center;
   font-weight: 600;
   font-size: 1.5rem;
+  margin-top: 20px;
+  margin-bottom: 40px;
 }
 .form__field {
   width: 100%;
-  margin-bottom: 12px;
+  margin-bottom: 40px;
 }
 .form__label {
-  margin-bottom: 4px;
+  display: block;
+  margin-bottom: 8px;
 }
 .form__input {
   width: 100%;
   background-color: #ddd;
   padding: 18px;
   border-radius: 12px;
+  transition: var(--transition-base);
 }
 .form__submit {
   width: 100%;
@@ -29,8 +34,15 @@
   border-radius: 12px;
   color: #eee;
   margin-bottom: 20px;
+  transition: var(--transition-base);
+}
+.form__submit:hover {
+  background-color: var(--primary-color);
 }
 .form__question-link {
   color: #19e;
   text-decoration: none;
+}
+.form__question-link:hover {
+  text-decoration: underline;
 }
