@@ -2,12 +2,11 @@ from django.shortcuts import render, redirect
 from django.contrib.auth import get_user_model,login, logout, authenticate
 from django.contrib.auth.models import User
 from .models import Profile
-import asyncio
 from django.views.decorators.http import require_http_methods
 from django.contrib.auth.decorators import login_required
 
 def is_valid_name(str):
-    return len(str) < 3 or len(str) > 50
+    return len(str) >= 3 or len(str) <= 50
 
 
 # Create your views here.
@@ -88,6 +87,8 @@ def user(request,username):
     return render(request,"user.html", context)
 
 def log_in(request):
+    if request.user.is_authenticated:
+        return redirect("feed")
     if request.method == "POST":
         username = request.POST.get("username", "")
         password = request.POST.get("password", "")
@@ -103,7 +104,7 @@ def log_in(request):
 
 
 @login_required(redirect_field_name="login")
-@require_http_methods(["POST"])
+@require_http_methods(["GET"])
 def log_out(request):
     
     logout(request)
@@ -121,6 +122,7 @@ def delete_user(request):
 def update_user(request):
     user = request.user
     profile =  Profile.objects.get(user = user)
+    
     first_name = request.POST.get("first_name","")
     last_name = request.POST.get("last_name","")
     bio = request.POST.get("bio","")
@@ -150,4 +152,4 @@ def update_user(request):
     user.save()
     profile.save()
     
-    return redirect("user")
+    return redirect("user",user.username)
