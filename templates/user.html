@@ -3,13 +3,8 @@
 
 {% comment %}
   Contexto:
-  str username
-  str first_name
-  str last_name
-  str bio
-  str avatar
-  int follower_count
-  int following_count
+  User user
+  Profile profile
 {% endcomment %}
 
 {% block title %}
@@ -28,13 +23,13 @@
   {% endif %}
   <section class="user">
     <div class="user__info">
-      <h1 class="user__username">{{username}}</h1>
-      <h2 class="user__fullname">{{first_name}} {{last_name}}</h2>
-      <pre class="user__bio">{{bio}}</pre>
+      <h1 class="user__username">{{user.username}}</h1>
+      <h2 class="user__fullname">{{user.first_name}} {{user.last_name}}</h2>
+      <pre class="user__bio">{{profile.bio}}</pre>
     </div>
     <div class="user__followers">
-      <p class="user__follower-count"><strong>{{followers_count}}</strong> seguidores</p>
-      <p class="user__follower-count"><strong>{{following_count}}</strong> seguidos</p>
+      <p class="user__follower-count"><strong>{{profile.followers_count}}</strong> seguidores</p>
+      <p class="user__follower-count"><strong>{{profile.following_count}}</strong> seguidos</p>
     </div>
     {% if request.user.is_authenticated %}
     <div x-data="{open:false}">
@@ -47,15 +42,15 @@
             {% csrf_token %}
             <div class="form__field">
               <label class="form__label" for="first_name">Nombre</label>
-              <input class="form__input" type="text" name="first_name" placeholder="Escribe un nombre" value="{{first_name}}" required>
+              <input class="form__input" type="text" name="first_name" placeholder="Escribe un nombre" value="{{user.first_name}}" required>
             </div>
             <div class="form__field">
               <label class="form__label" for="lastname_name">Apellido</label>
-              <input class="form__input" type="text" name="last_name" placeholder="Escribe un apellido" value="{{last_name}}" required>
+              <input class="form__input" type="text" name="last_name" placeholder="Escribe un apellido" value="{{user.last_name}}" required>
             </div>
             <div class="form__field">
               <label class="form__label" for="bio">Bio</label>
-              <textarea class="form__input" type="text" name="bio"placeholder="Escribe una biografía" value="{{bio}}" required></textarea>
+              <textarea class="form__input" type="text" name="bio"placeholder="Escribe una biografía" value="{{profile.bio}}" required></textarea>
             </div>
             <button class="form__submit" type="submit">Guardar</button>
           </form>

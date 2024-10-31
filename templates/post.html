@@ -3,9 +3,9 @@
 
 {% comment %}
   Contexto:
-  list[Post]: parent_posts -> ordenado por padre-hijo
-  Post: post -> objeto post a ver
-  list[Post]: comments -> posts que sean comentarios del post a ver
+  list[Post]: parent_posts // ordenado por padre-hijo
+  Post: post // objeto post a ver
+  list[Post]: comments // posts que sean comentarios del post a ver
 {% endcomment %}
 
 {% block title %}
@@ -21,18 +21,7 @@
   <section>
   {% if parent_posts %}
     {% for post in parent_posts %}
-      <a href="{% url 'post' post.id %}">
-        <div>
-          <h1>{{post.profile.user}}</h1>
-          <p>{{post.created_at}}</p>
-        </div>
-        <p>{{post.content}}</p>
-        <div>
-          <p>comments: {{post.comments_count}}</p>
-          <p>likes: {{post.likes_count}}</p>
-          <p>shares: {{post.shares_count}}</p>
-        </div>
-      </a>
+      {% include "includes/post.html" %}
     {% endfor %}
   {% endif %}
 
@@ -40,18 +29,7 @@
   
   {% if comments %}
     {% for post in comments %}
-      <a href="{% url 'post' post.id %}">
-        <div>
-          <h1>{{post.profile.user}}</h1>
-          <p>{{post.created_at}}</p>
-        </div>
-        <p>{{post.content}}</p>
-        <div>
-          <p>comments: {{post.comments_count}}</p>
-          <p>likes: {{post.likes_count}}</p>
-          <p>shares: {{post.shares_count}}</p>
-        </div>
-      </a>
+      {% include "includes/post.html" %}
     {% endfor %}
   {% endif %}
   </section>
