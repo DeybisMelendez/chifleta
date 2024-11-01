@@ -5,8 +5,7 @@ from django.shortcuts import redirect, render
 from django.views.decorators.http import require_http_methods
 
 from posts.models import Post
-
-from .models import Profile
+from .models import Profile, Follow
 
 
 def is_valid_name(str):
@@ -75,11 +74,23 @@ def user(request, username):
         return render(request, "404.html", status=404)
     user = list(user)[0]
     profile = Profile.objects.get(user=user)
-    posts = Post.objects.filter(profile=profile)
+    posts = Post.objects.filter(profile=profile).order_by("-created_at")
+    
+    follow_status = False
+    
+    my_user = request.user
+    my_profile = Profile.objects.get(user=my_user)
+    
+    follow = Follow.objects.filter(follower = my_profile, followed = profile)
+    
+    if follow.exists():
+        follow_status = True
+    
     context = {
         "profile": profile,
         "user": user,
-        "posts": posts
+        "posts": posts,
+        "follow_status": follow_status
     }
 
     return render(request, "user.html", context)
@@ -149,3 +160,30 @@ def update_user(request):
     profile.save()
 
     return redirect("user", user.username)
+
+
+@login_required(redirect_field_name="log_in")
+def follow_profile(request, username):
+    user = User.objects.filter(username = username)
+    if not user.exists():
+        return redirect("user", user.username)
+    profile = Profile.objects.get(user=user)
+    follow_status = False
+    
+    my_user = request.user
+    my_profile = Profile.objects.get(user=my_user)
+    
+    follow = Follow.objects.filter(follower = my_profile, followed = profile)
+    
+    if follow.exists():
+        follow.delete()
+    else:
+        follow = Follow.objects.create(follower =my_profile,followed = profile)
+        follow.save()
+        follow_status = True
+    
+    context={
+        "profile": profile,
+        "follow_status": follow_status
+    }
+    return render(request,"htmx/follow_status.html",context)
