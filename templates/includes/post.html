@@ -19,5 +19,9 @@
       <button class="post__button"><i class="material-icons">share</i></button>
       <p class="post__stat-value">{{post.shares_count}}</p>
     </div>
+    <div class="post__stat">
+      <a class="post__button" href="{% url 'delete_post' post.id %}"><i class="material-icons">delete</i></a>
+      
+    </div>
   </div>
 </div>

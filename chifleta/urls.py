@@ -21,7 +21,7 @@ from django.urls import path
 
 from accounts.views import (delete_user, log_in, log_out, register,
                             update_user, user)
-from posts.views import add_post, feed, post_view
+from posts.views import add_post, feed, post_view, delete_post, post_comment, post_share
 
 urlpatterns = [
     path("admin/", admin.site.urls),
@@ -34,7 +34,10 @@ urlpatterns = [
     path("update_user", update_user, name="update_user"),
     path("feed/", feed, name="feed"),
     path("post/<int:id>/", post_view, name="post"),
-    path("add_post", add_post, name="add_post")
+    path("add_post", add_post, name="add_post"),
+    path("delete_post/<int:pk>/", delete_post, name="delete_post"),
+    path("post_comment", post_comment, name="post_comment"),
+    path("post_share", post_share, name="post_share")
 ]
 
 # Servir archivos de media en modo depuración
