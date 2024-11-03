@@ -19,20 +19,24 @@
 {% block content %}
 <main>
   <section>
-  {% if parent_posts %}
-    {% for post in parent_posts %}
-      {% include "includes/post.html" %}
+  {% if parents %}
+    <div class="posts__parent">
+    {% for post in parents %}
+      {% include "includes/post.html" with is_node=True %}
     {% endfor %}
+    </div>
   {% endif %}
 
-  {% include "includes/post.html" %}
-  
+  {% include "includes/post.html" with autofocus=True %}
+  <div class="post__comments">
+    Comentarios
+  </div>
   {% if comments %}
     {% for post in comments %}
       {% include "includes/post.html" %}
     {% endfor %}
   {% endif %}
+  <div class="post__empty"></div>
   </section>
-
 </main>
 {% endblock content %}

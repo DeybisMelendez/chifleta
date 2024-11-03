@@ -17,7 +17,7 @@
   <script src="//unpkg.com/alpinejs"></script>
   <title>{% block title %}{% endblock title %} - Chifleta</title>
 </head>
-<body>
+<body hx-headers='{"X-CSRFToken": "{{ csrf_token }}"}'>
   
   <div class="container">
     {% include "includes/nav.html" %}

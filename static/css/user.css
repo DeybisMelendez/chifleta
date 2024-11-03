@@ -20,7 +20,7 @@
 .user__follower-count {
   padding: 8px;
 }
-.user__edit {
+.user__button {
   width: 100;
   padding: 18px;
   background-color: #111;
@@ -28,6 +28,6 @@
   border-radius: 12px;
   transition: var(--transition-base);
 }
-.user__edit:hover {
+.user__button:hover {
   background-color: var(--primary-color);
 }

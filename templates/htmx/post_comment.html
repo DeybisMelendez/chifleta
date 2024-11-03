@@ -1,0 +1,16 @@
+<div x-data="{open:true}" class="modal" x-show="open">
+  <div class="modal__content">
+    <span class="modal__close" @click.stop="open=false">
+      <i class="material-icons">close</i>
+    </span>
+    <form class="form" method="post" action="{% url 'post_comment' post.id %}">
+      <h1 class="form__title">Comentar post</h1>
+      {% csrf_token %}
+      {% include "includes/post.html" with hide_buttons=True %}
+      <div class="form__field">
+        <textarea class="form__input" type="text" name="content" placeholder="¿Qué novedades tienes?" required></textarea>
+      </div>
+      <button class="form__submit" type="submit">Comentar</button>
+    </form>
+  </div>
+</div>

@@ -3,6 +3,10 @@
   padding: 20px;
   display: flex;
   justify-content: space-between;
+  position:sticky;
+  top: 0;
+  overflow: hidden;
+  background-color: var(--background-color);
 }
 .nav__brand {
   font-weight:bold;
@@ -16,7 +20,7 @@
   list-style: none;
 }
 .nav__link {
-  color: var(--black-color);
+  color: var(--text-color);
   text-decoration: none;
   transition: var(--transition-base);
 }

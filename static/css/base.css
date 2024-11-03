@@ -1,24 +1,30 @@
 :root {
   --visible-border: 1px solid #999;
-  --padding-base: 40px;
-  --black-color: #111;
-  --white-color: #eee;
-  --primary-color: #45e;
+  --padding-base: 20px;
+  --text-color: #111;
+  --text-secondary-color: #999;
+  --background-color: #eee;
+  --background-hover-color: #ddd;
+  --primary-color: #55c;
   --secondary-color: #19e;
-  --error-color: #d55;
+  --error-color: #c55;
+  --success-color: #5c5;
   --transition-base: all 0.3s ease-in-out;
 }
 
 body {
-  background-color: var(--white-color);
+  background-color: var(--background-color);
 }
 
 .container {
-  max-width: 800px;
+  max-width: 720px;
   min-height: 100vh;
   margin: auto;
   border-left: var(--visible-border);
   border-right: var(--visible-border);
+}
+.main {
+  position:fixed;
 }
 
 .footer {

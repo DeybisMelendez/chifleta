@@ -75,17 +75,17 @@ def user(request, username):
     user = list(user)[0]
     profile = Profile.objects.get(user=user)
     posts = Post.objects.filter(profile=profile).order_by("-created_at")
-    
+
     follow_status = False
-    
+
     my_user = request.user
     my_profile = Profile.objects.get(user=my_user)
-    
-    follow = Follow.objects.filter(follower = my_profile, followed = profile)
-    
+
+    follow = Follow.objects.filter(follower=my_profile, followed=profile)
+
     if follow.exists():
         follow_status = True
-    
+
     context = {
         "profile": profile,
         "user": user,
@@ -164,26 +164,31 @@ def update_user(request):
 
 @login_required(redirect_field_name="log_in")
 def follow_profile(request, username):
-    user = User.objects.filter(username = username)
+    # TODO: Utilizar el toggle_follow del modelo Profile
+    user = User.objects.filter(username=username)
     if not user.exists():
         return redirect("user", user.username)
+    user = list(user)[0]
     profile = Profile.objects.get(user=user)
     follow_status = False
-    
+
     my_user = request.user
     my_profile = Profile.objects.get(user=my_user)
-    
-    follow = Follow.objects.filter(follower = my_profile, followed = profile)
-    
-    if follow.exists():
-        follow.delete()
+
+    follow = Follow.objects.filter(follower=my_profile, followed=profile)
+    if request.method == "POST":
+        if follow.exists():
+            follow.delete()
+        else:
+            follow = Follow.objects.create(
+                follower=my_profile, followed=profile)
+            follow.save()
+            follow_status = True
     else:
-        follow = Follow.objects.create(follower =my_profile,followed = profile)
-        follow.save()
-        follow_status = True
-    
-    context={
-        "profile": profile,
-        "follow_status": follow_status
+        if follow.exists():
+            follow_status = True
+    context = {
+        "follow_status": follow_status,
+        "username": username
     }
-    return render(request,"htmx/follow_status.html",context)
+    return render(request, "htmx/follow_status.html", context)

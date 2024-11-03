@@ -8,7 +8,7 @@
 {% endcomment %}
 
 {% block title %}
-  {{username}}
+  {{user.username}}
 {% endblock title %}
 
 {% block styles %}
@@ -33,7 +33,11 @@
     </div>
     {% if request.user.is_authenticated %}
     <div x-data="{open:false}">
-      <button class="user__edit" type="button" @click="open=true">Editar perfil</button>
+      {% if user.username == request.user.username %}
+      <button class="user__button" type="button" @click="open=true">Editar perfil</button>
+      {% else %}
+      <div hx-trigger="load" hx-get="{% url 'follow_status' user.username %}" hx-swap="outerHTML"></div>
+      {% endif %}
       <div class="modal" x-show="open">
         <div class="modal__content">
           <span class="modal__close" @click="open=false"><i class="material-icons">close</i></span>
