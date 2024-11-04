@@ -1,4 +1,5 @@
 from django.contrib.auth.decorators import login_required
+from django.contrib.auth.models import User
 from django.shortcuts import redirect, render
 from django.views.decorators.http import require_http_methods
 
@@ -14,14 +15,16 @@ def feed(request):
     profile = Profile.objects.get(user=user)
     follows = Follow.objects.filter(follower=profile)
     # TODO: Optimizar cantidad de posts a enviar (NO ES URGENTE)
-    posts = 0
+    posts = None
     for follow in follows:
-        if posts == 0:
+        if posts is None:
             posts = Post.objects.filter(profile=follow.followed)
         else:
             posts |= Post.objects.filter(profile=follow.followed)
-
-    posts |= Post.objects.filter(profile=profile)
+    if posts is not None:
+        posts |= Post.objects.filter(profile=profile)
+    else:
+        posts = Post.objects.filter(profile=profile)
     posts = posts.order_by("-created_at")
 
     context = {
@@ -34,9 +37,9 @@ def post_view(request, id):
     post = Post.objects.get(pk=id)
     comments = Post.objects.filter(parent=post.id)
 
-    parents = Post.objects.none()  
+    parents = Post.objects.none()
     parent = post.parent
-    
+
     while parent is not None:
         parents |= Post.objects.filter(pk=parent.pk)
         parent = parent.parent
@@ -46,7 +49,7 @@ def post_view(request, id):
         "comments": comments,
         "parents": parents
     }
-    
+
     return render(request, "post.html", context)
 
 
@@ -75,48 +78,73 @@ def delete_post(request, pk):
 
 @login_required(redirect_field_name="log_in")
 def post_comment(request, pk):
-    #TODO: Guardar correctamente el comentario
     user = request.user
     profile = Profile.objects.get(user=user)
     if request.method == "POST":
         parent = Post.objects.get(pk=pk)
         content = request.POST.get("content", "")
-        post = Post.objects.create(profile=profile, content=content, parent=parent)
+        post = Post.objects.create(
+            profile=profile, content=content, parent=parent)
         post.save()
-        print(post)
         return redirect("feed")
-    
+
     post = Post.objects.filter(pk=pk)
     if not post.exists():
         return redirect("feed")
-    
+
     post = post.first()
     context = {
         "post": post
     }
     return render(request, "htmx/post_comment.html", context)
 
+
 @login_required(redirect_field_name="log_in")
 def post_share(request, pk):
-    #TODO: Guardar correctamente el share
     user = request.user
     profile = Profile.objects.get(user=user)
-    
+
     if request.method == "POST":
         share = Post.objects.get(pk=pk)
         content = request.POST.get("content", "")
-        post = Post.objects.create(profile=profile, content=content,share=share)
+        post = Post.objects.create(
+            profile=profile, content=content, share=share)
         post.save()
         return redirect("feed")
-    
+
     post = Post.objects.filter(pk=pk)
     if not post.exists():
         return redirect("feed")
-    
+
     post = post.first()
-    
+
     context = {
         "post": post,
     }
-    
+
     return render(request, "htmx/post_share.html", context)
+
+
+def list_followers(request, username):
+    user = User.objects.filter(username=username).first()
+    profile = Profile.objects.get(user=user)
+    # TODO anadir validaciones de errores
+    followers = Follow.objects.filter(followed=profile)
+
+    context = {
+        "followers": followers
+    }
+
+    return render(request, "followers.html", context)
+
+
+def list_following(request, username):
+    user = User.objects.filter(username=username).first()
+    profile = Profile.objects.get(user=user)
+
+    following = Follow.objects.filter(follower=profile)
+
+    context = {
+        "following": following
+    }
+    return render(request, "followers.html", context)

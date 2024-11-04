@@ -18,15 +18,15 @@ Contexto:
   <h1>Seguidores</h1>
   {% for follow in followers %}
     <div>
-      <h2>{{follow.follower.profile}}</h2>
+      <h2>{{follow.followers}}</h2>
       <p>{{follow.followed_at}}</p>
     </div>
   {% endfor %}
   {% endif %}
-  {% if followings %}
+  {% if following %}
   <h1>Seguidos</h1>
   {% for follow in following %}
-    <h2>{{follow.follower.profile}}</h2>
+    <h2>{{follow.followed}}</h2>
     <p>{{follow.followed_at}}</p>
   {% endfor %}
   {% endif %}

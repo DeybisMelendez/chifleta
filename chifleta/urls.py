@@ -19,9 +19,10 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path
 
-from accounts.views import (delete_user, log_in, log_out, register,
-                            update_user, user, follow_profile)
-from posts.views import add_post, feed, post_view, delete_post, post_comment, post_share
+from accounts.views import (delete_user, follow_profile, log_in, log_out,
+                            register, update_user, user)
+from posts.views import (add_post, delete_post, feed, list_followers,
+                        list_following, post_comment, post_share, post_view)
 
 urlpatterns = [
     path("admin/", admin.site.urls),
@@ -38,7 +39,10 @@ urlpatterns = [
     path("delete_post/<int:pk>/", delete_post, name="delete_post"),
     path("post_comment/<int:pk>/", post_comment, name="post_comment"),
     path("post_share/<int:pk>/", post_share, name="post_share"),
-    path("follow_profile/<str:username>/", follow_profile, name="follow_status")
+    path("follow_profile/<str:username>/",
+        follow_profile, name="follow_status"),
+    path("followers/<str:username>/", list_followers, name="list_followers"),
+    path("following/<str:username>/", list_following, name="list_following")
 ]
 
 # Servir archivos de media en modo depuración
