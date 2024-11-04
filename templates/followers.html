@@ -1,0 +1,34 @@
+{% extends "layouts/base.html" %}
+{% load static %}
+{% comment %}
+Contexto:
+  list[Follow] followers
+  list[Follow] followings
+{% endcomment %}
+{% block title %}
+  Feed
+{% endblock title %}
+
+{% block styles %}
+{% endblock styles %}
+
+{% block content %}
+<section>
+  {% if followers %}
+  <h1>Seguidores</h1>
+  {% for follow in followers %}
+    <div>
+      <h2>{{follow.follower.profile}}</h2>
+      <p>{{follow.followed_at}}</p>
+    </div>
+  {% endfor %}
+  {% endif %}
+  {% if followings %}
+  <h1>Seguidos</h1>
+  {% for follow in following %}
+    <h2>{{follow.follower.profile}}</h2>
+    <p>{{follow.followed_at}}</p>
+  {% endfor %}
+  {% endif %}
+</section>
+{% endblock content %}
