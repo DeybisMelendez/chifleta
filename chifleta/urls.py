@@ -23,6 +23,7 @@ from accounts.views import (delete_user, follow_profile, log_in, log_out,
                             register, update_user, user)
 from posts.views import (add_post, delete_post, feed, list_followers,
                         list_following, post_comment, post_share, post_view)
+from notifications.views import notification, check_notification, check_all_notification
 
 urlpatterns = [
     path("admin/", admin.site.urls),
@@ -42,7 +43,11 @@ urlpatterns = [
     path("follow_profile/<str:username>/",
         follow_profile, name="follow_status"),
     path("followers/<str:username>/", list_followers, name="list_followers"),
-    path("following/<str:username>/", list_following, name="list_following")
+    path("following/<str:username>/", list_following, name="list_following"),
+    path("notifications/", notification, name="notification"),
+    path("check_notification/<int:pk>/", check_notification, name="check_notification"),
+    path("check_all_notification/", check_all_notification, name="check_all_notification")
+
 ]
 
 # Servir archivos de media en modo depuración

@@ -21,4 +21,4 @@ class Notification(models.Model):
     is_read = models.BooleanField(default=False)
 
     def __str__(self):
-        return f"Notification for {self.account.user.username}: {self.notification_type} at {self.created_at}"
+        return f"Notification for {self.profile.user.username}: {self.notification_type} at {self.created_at}"

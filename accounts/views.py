@@ -34,9 +34,13 @@ def register(request):
             "password2": confirm_password,
         }
 
-        if len(username) < 6:
-            context["error"] = "Escriba un minimo de 6 caracteres para el usuario."
+        if not is_valid_name(username):
+            context["error"] = "Escriba un nombre de usuario en un rango de 3 a 50 caracteres."
             return render(request, "register.html", context, status=400)
+        if not username.isalnum():
+            context["error"] = "Escriba un nombre que contenga letras minusculas, numeros"
+            return render(request, "register.html", context, status=400)
+        
         if not is_valid_name(first_name):
             context["error"] = "Escriba un nombre en un rango de 3 a 50 caracteres."
             return render(request, "register.html", context, status=400)
