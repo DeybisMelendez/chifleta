@@ -1,5 +1,6 @@
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
+from django.db.models import Q
 from django.shortcuts import redirect, render
 from django.views.decorators.http import require_http_methods
 
@@ -10,22 +11,14 @@ from .models import Post
 
 @login_required(redirect_field_name="log_in")
 def feed(request):
-
     user = request.user
     profile = Profile.objects.get(user=user)
-    follows = Follow.objects.filter(follower=profile)
-    # TODO: Optimizar cantidad de posts a enviar (NO ES URGENTE)
-    posts = None
-    for follow in follows:
-        if posts is None:
-            posts = Post.objects.filter(profile=follow.followed)
-        else:
-            posts |= Post.objects.filter(profile=follow.followed)
-    if posts is not None:
-        posts |= Post.objects.filter(profile=profile)
-    else:
-        posts = Post.objects.filter(profile=profile)
-    posts = posts.order_by("-created_at")
+
+    followed_ids = Follow.objects.filter(
+        follower=profile).values_list("followed_id", flat=True)
+
+    posts = Post.objects.filter(Q(profile_id__in=followed_ids) | Q(
+        profile=profile) & Q(parent__isnull=True)).order_by("-created_at")
 
     context = {
         "posts": posts

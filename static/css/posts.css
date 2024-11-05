@@ -1,6 +1,5 @@
 .posts {
   display: flex;
-  position: fixed;
   flex-direction: column;
 }
 .posts__parent {
