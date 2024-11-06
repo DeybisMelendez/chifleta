@@ -1,0 +1,18 @@
+{% comment %}
+Contexto:
+  bool has_notifications
+{% endcomment %}
+
+{% if has_notifications %}
+<li class="nav__item">
+  <a class="nav__link nav__link--alert" href="{% url 'notifications' %}">
+    <i class="material-icons">notifications</i>
+  </a>
+</li>
+{% else %}
+<li class="nav__item">
+  <a class="nav__link" href="{% url 'notifications' %}">
+    <i class="material-icons">notifications</i>
+  </a>
+</li>
+{% endif %}
