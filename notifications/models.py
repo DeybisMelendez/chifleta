@@ -1,7 +1,37 @@
 from django.db import models
+from django.db.models.signals import post_save
+from django.dispatch import receiver
 
-from accounts.models import Profile
-from posts.models import Post
+from accounts.models import Follow, Profile
+from posts.models import Post, Like
+
+
+@receiver(post_save, sender=Like)
+def create_notification_for_like(sender, instance, created, **kwargs):
+    if created and instance.profile.pk != instance.post.profile.pk:
+        notification = Notification.objects.create(
+            notification_type="like", follower=instance.profile, profile=instance.post.profile)
+        notification.save()
+
+@receiver(post_save, sender=Follow)
+def create_notification_for_follow(sender, instance, created, **kwargs):
+    if created and instance.follower.pk != instance.followed.pk:
+        notification = Notification.objects.create(
+            notification_type="follow", follower=instance.follower, profile=instance.followed)
+        notification.save()
+
+
+@receiver(post_save, sender=Post)
+def create_notification_for_post(sender, instance, created, **kwargs):
+    if created and instance.profile.pk != instance.parent.profile:
+        if instance.parent:
+            notification = Notification.objects.create(
+                notification_type="comment", post=instance, profile=instance.parent.profile)
+            notification.save()
+        if instance.share:
+            notification = Notification.objects.create(
+                notification_type="share", post=instance, profile=instance.share.profile)
+            notification.save()
 
 
 class Notification(models.Model):
@@ -11,7 +41,8 @@ class Notification(models.Model):
         ("share", "Share"),
         ("follow", "Follow"),
     ]
-
+    follower = models.ForeignKey(
+        Profile, null=True, blank=True, related_name="followers", on_delete=models.CASCADE)
     profile = models.ForeignKey(Profile, on_delete=models.CASCADE)
     notification_type = models.CharField(
         max_length=10, choices=NOTIFICATION_TYPES)

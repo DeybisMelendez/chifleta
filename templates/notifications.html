@@ -1,1 +1,43 @@
-{{notifications}}
+{% extends "layouts/base.html" %}
+{% load static %}
+
+{% block title %}
+  Notificaciones
+{% endblock title %}
+
+{% block styles %}
+{% endblock styles %}
+
+{% block content %}
+<main>
+  <h1 class="notification-title">Notificaciones</h1>
+  {% for notification in notifications %}
+  <div class="notification">
+  {% if notification.notification_type == "like" %}
+    <p class="notification__type"><strong>{{notification.follower}}</strong> indicó que le gusta tu post.
+      <span class="notification__date">{{notification.created_at|date:"d/M/Y"}}</span>
+    </p>
+    <p class="notification__content">{{notification.content.post|truncatechars:50}}</p>
+  {% endif %}
+  {% if notification.notification_type == "follow" %}
+    <p class="notification__type"><strong>{{notification.follower}}</strong> comenzó a seguirte.
+      <span class="notification__date">{{notification.content.created_at|date:"d/M/Y"}}</span>
+    </p>
+  {% endif %}
+  {% if notification.notification_type == "comment" %}
+    <p class="notification__type"><strong>{{notification.post.profile}}</strong> te dejó un comentario.
+      <span class="notification__date">{{notification.created_at|date:"d/M/Y"}}</span>
+      <p class="notification__content">{{notification.post.content|truncatechars:50}}</p>
+    </p>
+  {% endif %}
+  {% if notification.notification_type == "share" %}
+    <p class="notification__type"><strong>{{notification.post.profile}}</strong> compartió tu post.
+      <span class="notification__date">{{notification.created_at|date:"d/M/Y"}}</span>
+      <p><pre>{{notification.post.content|truncatechars:50}}</pre></p>
+    </p>
+  {% endif %}
+  
+  </div>
+  {% endfor %}
+</main>
+{% endblock content %}

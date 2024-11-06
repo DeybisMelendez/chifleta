@@ -2,7 +2,6 @@ from django.db import models
 
 from accounts.models import Profile
 
-
 class Post(models.Model):
     profile = models.ForeignKey(Profile, on_delete=models.CASCADE)
     # TODO: Implementar Markdown en los posts, evaluar el tamaño máximo de caracteres
@@ -10,7 +9,7 @@ class Post(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
     # Indicaría si el post es comentario de otro post, tendría una referencia al post comentado
     parent = models.ForeignKey(
-        "self", null=True, blank=True, on_delete=models.CASCADE)
+        "self", null=True, blank=True, related_name="parents", on_delete=models.CASCADE)
     # Indicaría si el post es un "retuit" o repost, tendría una referencia al post compartido
     share = models.ForeignKey(
         "self", null=True, blank=True, related_name="shares", on_delete=models.CASCADE)
@@ -30,15 +29,15 @@ class Post(models.Model):
 
     def save(self, *args, **kwargs):
         """Sobrescribir el método save para manejar la lógica de compartidos y comentarios."""
+        if not self.pk:
+            if self.parent:
+                self.parent.comments_count += 1
+                self.parent.save()
+
+            if self.share:
+                self.share.shares_count += 1
+                self.share.save()
         super().save(*args, **kwargs)
-
-        if self.parent:
-            self.parent.comments_count += 1
-            self.parent.save()
-
-        if self.share:
-            self.share.shares_count += 1
-            self.share.save()
 
     def delete(self, *args, **kwargs):
         """Sobrescribir el método delete para manejar la lógica de eliminación de comentarios."""
@@ -62,7 +61,7 @@ class Like(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
 
     def save(self, *args, **kwargs):
-        if not self.pk:  # Evita duplicar likes en el contador
+        if not self.pk:
             self.post.likes_count += 1
             self.post.save()
         super().save(*args, **kwargs)
