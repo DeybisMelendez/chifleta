@@ -1,19 +1,12 @@
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import redirect, render
 
-from accounts.models import Profile
-
 from .models import Notification
-
-# Create your views here.
 
 
 @login_required(redirect_field_name="log_in")
-def notification(request):
-    user = request.user
-    profile = Profile.objects.get(user=user)
-
-    notifications = Notification.objects.filter(profile=profile)
+def notifications(request):
+    notifications = Notification.objects.filter(profile__user=request.user)
 
     context = {
         "notifications": notifications
@@ -23,7 +16,7 @@ def notification(request):
 
 
 @login_required(redirect_field_name="log_in")
-def check_notification(request, pk):
+def check_notification(_, pk):
 
     notifications = Notification.objects.filter(pk=pk)
     if not notifications.exists():
@@ -37,10 +30,8 @@ def check_notification(request, pk):
 
 
 def check_all_notification(request):
-    user = request.user
-    profile = Profile.objects.get(user=user)
 
-    notifications = Notification.objects.filter(profile=profile)
+    notifications = Notification.objects.filter(profile__user=request.user)
 
     for notification in notifications:
         notification.is_read = True
@@ -50,11 +41,8 @@ def check_all_notification(request):
 
 
 def notifications_button(request):
-    user = request.user
-    profile = Profile.objects.get(user=user)
-    
-    has_notifications= Notification.objects.filter(profile=profile,is_read=True).exists()
-    print(has_notifications)
+
+    has_notifications= Notification.objects.filter(profile__user=request.user,is_read=True).exists()
     context={
         "has_notifications": has_notifications
     }
