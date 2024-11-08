@@ -119,17 +119,22 @@ def update_user(request):
 
 @login_required
 def follow_profile(request, username):
+
     target_user = User.objects.filter(username=username).first()
-    if not target_user:
+    if target_user is None:
         return redirect("user", request.user.username)
 
     target_profile = Profile.objects.get(user=target_user)
-    my_profile = request.user.profile
-
-    follow, created = Follow.objects.get_or_create(
-        follower=my_profile, followed=target_profile)
-    if not created:
-        follow.delete()
-
-    context = {"follow_status": created, "username": username}
+    my_profile = Profile.objects.get(user=request.user)
+    
+    follow_status = Follow.objects.filter(follower=my_profile,followed=target_profile).exists()
+    
+    if request.method == "POST":
+        follow_status = my_profile.toggle_follow(target_profile)
+    
+    context = {
+        "follow_status": follow_status,
+        "username": username
+    }
+    
     return render(request, "htmx/follow_status.html", context)
