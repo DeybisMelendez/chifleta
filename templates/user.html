@@ -19,7 +19,7 @@
 {% block content %}
 <main>
   {% if request.user.is_authenticated %}
-    {% include "includes/error.html" %}
+    {% include "includes/messages.html" %}
   {% endif %}
   <section class="user">
     <div class="user__info">

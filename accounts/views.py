@@ -2,14 +2,13 @@ from django.contrib.auth import authenticate, get_user_model, login, logout
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import redirect, render
 from django.views.decorators.http import require_http_methods
+
 from posts.models import Post
-from .models import Profile, Follow
+
+from .models import Follow, Profile
+from .validations import is_valid_register_form, is_valid_update_form
 
 User = get_user_model()
-
-
-def is_valid_name(name):
-    return 3 <= len(name) <= 50
 
 
 def register(request):
@@ -22,7 +21,7 @@ def register(request):
         last_name = request.POST.get("last_name", "")
         password = request.POST.get("password1", "")
         confirm_password = request.POST.get("password2", "")
-        
+
         context = {
             "username": username,
             "first_name": first_name,
@@ -31,27 +30,11 @@ def register(request):
             "password2": confirm_password,
         }
 
-        if not (is_valid_name(username) and username.isalnum()):
-            context["error"] = "El nombre de usuario debe tener entre 3 y 50 caracteres alfanuméricos."
-            return render(request, "register.html", context, status=400)
-        
-        if not all(map(is_valid_name, [first_name, last_name])):
-            context["error"] = "El nombre y apellido deben tener entre 3 y 50 caracteres."
-            return render(request, "register.html", context, status=400)
-        
-        if User.objects.filter(username=username).exists():
-            context["error"] = "El nombre de usuario ya existe, elija otro."
-            return render(request, "register.html", context, status=400)
-        
-        if password != confirm_password:
-            context["error"] = "Las contraseñas no coinciden, inténtelo de nuevo."
-            return render(request, "register.html", context, status=400)
-        
-        if len(password) < 8:
-            context["error"] = "La contraseña debe tener al menos 8 caracteres."
+        if not is_valid_register_form(request, username, first_name, last_name, password, confirm_password):
             return render(request, "register.html", context, status=400)
 
-        user = User.objects.create_user(username=username, password=password, first_name=first_name, last_name=last_name)
+        user = User.objects.create_user(
+            username=username, password=password, first_name=first_name, last_name=last_name)
         Profile.objects.create(user=user)
         login(request, user)
         return redirect("user", user.username)
@@ -63,11 +46,12 @@ def user(request, username):
     user = User.objects.filter(username=username).first()
     if not user:
         return render(request, "404.html", status=404)
-    
+
     profile = Profile.objects.get(user=user)
     posts = Post.objects.filter(profile=profile).order_by("-created_at")
-    follow_status = Follow.objects.filter(follower=request.user.profile, followed=profile).exists()
-    
+    follow_status = Follow.objects.filter(
+        follower=request.user.profile, followed=profile).exists()
+
     context = {
         "profile": profile,
         "user": user,
@@ -81,19 +65,20 @@ def user(request, username):
 def log_in(request):
     if request.user.is_authenticated:
         return redirect("feed")
-    
+
     if request.method == "POST":
         username = request.POST.get("username", "")
         password = request.POST.get("password", "")
         user = authenticate(username=username, password=password)
 
         if not user:
-            context = {"error": "Usuario o contraseña incorrectos.", "username": username}
+            context = {"error": "Usuario o contraseña incorrectos.",
+                    "username": username}
             return render(request, "login.html", context, status=400)
-        
+
         login(request, user)
         return redirect("feed")
-    
+
     return render(request, "login.html")
 
 
@@ -120,12 +105,9 @@ def update_user(request):
     first_name = request.POST.get("first_name", "")
     last_name = request.POST.get("last_name", "")
     bio = request.POST.get("bio", "")
-    
-    if not all(map(is_valid_name, [first_name, last_name])):
-        return render(request, "user.html", {"update_error": "Nombre y apellido deben tener entre 3 y 50 caracteres.", "user": user, "profile": profile}, status=400)
-    
-    if len(bio) > 160:
-        return render(request, "user.html", {"update_error": "La biografía debe ser menor a 160 caracteres.", "user": user, "profile": profile}, status=400)
+
+    if not is_valid_update_form(request,first_name,last_name,bio):
+        return render(request, "user.html", {"user": user, "profile": profile})
 
     user.first_name, user.last_name = first_name, last_name
     profile.bio = bio
@@ -144,9 +126,10 @@ def follow_profile(request, username):
     target_profile = Profile.objects.get(user=target_user)
     my_profile = request.user.profile
 
-    follow, created = Follow.objects.get_or_create(follower=my_profile, followed=target_profile)
+    follow, created = Follow.objects.get_or_create(
+        follower=my_profile, followed=target_profile)
     if not created:
         follow.delete()
-    
+
     context = {"follow_status": created, "username": username}
     return render(request, "htmx/follow_status.html", context)
