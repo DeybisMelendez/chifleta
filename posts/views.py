@@ -11,8 +11,8 @@ from .models import Post
 
 @login_required(redirect_field_name="log_in")
 def feed(request):
-    user = request.user
-    profile = Profile.objects.get(user=user)
+    profile = Profile.objects.filter(
+        user__username=request.user.username).first()
 
     followed_ids = Follow.objects.filter(
         follower=profile).values_list("followed_id", flat=True)
@@ -49,8 +49,7 @@ def post_view(request, id):
 @login_required(redirect_field_name="log_in")
 @require_http_methods(["POST"])
 def add_post(request):
-    user = request.user
-    profile = Profile.objects.get(user=user)
+    profile = Profile.objects.get(user=request.user)
 
     content = request.POST.get("content", "")
     post = Post.objects.create(profile=profile, content=content)
@@ -60,12 +59,14 @@ def add_post(request):
 
 @login_required(redirect_field_name="log_in")
 def delete_post(request, pk):
-    user = request.user
-    profile = Profile.objects.get(user=user)
-    post = Post.objects.get(pk=pk)
+    profile = Profile.objects.get(user__username=request.user.username)
+    post = Post.objects.filter(pk=pk)
+    if not post.exists():
+        return redirect("user", request.user.username)
+    post = post.first()
     if post.profile == profile:
         post.delete()
-        return redirect("user", user.username)
+        return redirect("user", request.user.username)
     return redirect("feed")
 
 
@@ -74,7 +75,10 @@ def post_comment(request, pk):
     user = request.user
     profile = Profile.objects.get(user=user)
     if request.method == "POST":
-        parent = Post.objects.get(pk=pk)
+        parent = Post.objects.filter(pk=pk)
+        if not parent.exists():
+            return redirect("feed")
+        parent= parent.first()
         content = request.POST.get("content", "")
         post = Post.objects.create(
             profile=profile, content=content, parent=parent)
@@ -98,8 +102,11 @@ def post_share(request, pk):
     profile = Profile.objects.get(user=user)
 
     if request.method == "POST":
-        share = Post.objects.get(pk=pk)
+        share = Post.objects.filter(pk=pk)
+        if not share.exists():
+            return redirect("feed")
         content = request.POST.get("content", "")
+        share = share.first()
         post = Post.objects.create(
             profile=profile, content=content, share=share)
         post.save()
@@ -116,28 +123,3 @@ def post_share(request, pk):
     }
 
     return render(request, "htmx/post_share.html", context)
-
-
-def list_followers(request, username):
-    user = User.objects.filter(username=username).first()
-    profile = Profile.objects.get(user=user)
-    # TODO anadir validaciones de errores
-    followers = Follow.objects.filter(followed=profile)
-
-    context = {
-        "followers": followers
-    }
-
-    return render(request, "followers.html", context)
-
-
-def list_following(request, username):
-    user = User.objects.filter(username=username).first()
-    profile = Profile.objects.get(user=user)
-
-    following = Follow.objects.filter(follower=profile)
-
-    context = {
-        "following": following
-    }
-    return render(request, "followers.html", context)

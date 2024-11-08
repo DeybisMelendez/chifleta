@@ -30,7 +30,7 @@ def create_notification_for_post(sender, instance, created, **kwargs):
                     notification_type="comment", post=instance, profile=instance.parent.profile)
                 notification.save()
         if instance.share:
-            if instance.profile.pk != instance.parent.profile:
+            if instance.profile.pk != instance.share.profile:
                 notification = Notification.objects.create(
                     notification_type="share", post=instance, profile=instance.share.profile)
                 notification.save()

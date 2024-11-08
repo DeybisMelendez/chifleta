@@ -59,3 +59,10 @@ def is_valid_update_form(request, first_name, last_name, bio):
                             ErrorCode.INVALID_LASTNAME)
         return False
     return True
+
+def is_valid_login_form(request,user):
+    if not user:
+        messages.add_message(request, messages.ERROR,
+                            ErrorCode.WRONG_USER)
+        return False
+    return True

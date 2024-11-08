@@ -6,7 +6,7 @@ from django.views.decorators.http import require_http_methods
 from posts.models import Post
 
 from .models import Follow, Profile
-from .validations import is_valid_register_form, is_valid_update_form
+from .validations import is_valid_register_form, is_valid_update_form, is_valid_login_form
 
 User = get_user_model()
 
@@ -71,9 +71,8 @@ def log_in(request):
         password = request.POST.get("password", "")
         user = authenticate(username=username, password=password)
 
-        if not user:
-            context = {"error": "Usuario o contraseña incorrectos.",
-                    "username": username}
+        if not is_valid_login_form(request,user):
+            context = {"username": username}
             return render(request, "login.html", context, status=400)
 
         login(request, user)
@@ -107,7 +106,7 @@ def update_user(request):
     bio = request.POST.get("bio", "")
 
     if not is_valid_update_form(request,first_name,last_name,bio):
-        return render(request, "user.html", {"user": user, "profile": profile})
+        return render(request, "user.html", {"user": user, "profile": profile}, status=400)
 
     user.first_name, user.last_name = first_name, last_name
     profile.bio = bio
@@ -118,18 +117,45 @@ def update_user(request):
 
 
 @login_required
-def follow_profile(request, username):
-    target_user = User.objects.filter(username=username).first()
-    if not target_user:
-        return redirect("user", request.user.username)
+def follow(request, username):
 
-    target_profile = Profile.objects.get(user=target_user)
-    my_profile = request.user.profile
-
-    follow, created = Follow.objects.get_or_create(
-        follower=my_profile, followed=target_profile)
-    if not created:
-        follow.delete()
-
-    context = {"follow_status": created, "username": username}
+    target_profile = Profile.objects.get(user__username=username)
+    my_profile = Profile.objects.get(user=request.user)
+    
+    follow_status = Follow.objects.filter(follower=my_profile,followed=target_profile).exists()
+    
+    if request.method == "POST":
+        follow_status = my_profile.toggle_follow(target_profile)
+    
+    context = {
+        "follow_status": follow_status,
+        "username": username
+    }
+    
     return render(request, "htmx/follow_status.html", context)
+
+def list_followers(request, username):
+    profile = Profile.objects.filter(user__username=username)
+    if not profile.exists():
+        return redirect("feed")
+    profile = profile.first()
+    followers = Follow.objects.filter(followed=profile)
+
+    context = {
+        "followers": followers
+    }
+
+    return render(request, "followers.html", context)
+
+
+def list_following(request, username):
+    profile = Profile.objects.filter(user__username=username)
+    if not profile.exists():
+        return redirect("feed")
+    profile = profile.first()
+    following = Follow.objects.filter(follower=profile)
+
+    context = {
+        "following": following
+    }
+    return render(request, "followers.html", context)

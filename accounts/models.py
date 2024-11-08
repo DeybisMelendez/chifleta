@@ -20,6 +20,9 @@ class Profile(models.Model):
             follower=self, followed=profile)
         if not created:
             follow.delete()
+            return False
+        follow.save()
+        return True
 
     def update_follow_counts(self):
         """
