@@ -22,7 +22,7 @@ from django.urls import path
 from accounts.views import (delete_user, follow_profile, log_in, log_out,
                             register, update_user, user)
 from notifications.views import (check_all_notification, check_notification,
-                                notification)
+                                notification,notifications_button)
 from posts.views import (add_post, delete_post, feed, list_followers,
                         list_following, post_comment, post_share, post_view)
 
@@ -47,7 +47,8 @@ urlpatterns = [
     path("following/<str:username>/", list_following, name="list_following"),
     path("notifications/", notification, name="notifications"),
     path("check_notification/<int:pk>/", check_notification, name="check_notification"),
-    path("check_all_notification/", check_all_notification, name="check_all_notification")
+    path("check_all_notification/", check_all_notification, name="check_all_notification"),
+    path("htmx/notification_button/", notifications_button, name="notifications_button")
 
 ]
 

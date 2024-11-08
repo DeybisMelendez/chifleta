@@ -23,15 +23,17 @@ def create_notification_for_follow(sender, instance, created, **kwargs):
 
 @receiver(post_save, sender=Post)
 def create_notification_for_post(sender, instance, created, **kwargs):
-    if created and instance.profile.pk != instance.parent.profile:
+    if created:
         if instance.parent:
-            notification = Notification.objects.create(
-                notification_type="comment", post=instance, profile=instance.parent.profile)
-            notification.save()
+            if instance.profile.pk != instance.parent.profile:
+                notification = Notification.objects.create(
+                    notification_type="comment", post=instance, profile=instance.parent.profile)
+                notification.save()
         if instance.share:
-            notification = Notification.objects.create(
-                notification_type="share", post=instance, profile=instance.share.profile)
-            notification.save()
+            if instance.profile.pk != instance.parent.profile:
+                notification = Notification.objects.create(
+                    notification_type="share", post=instance, profile=instance.share.profile)
+                notification.save()
 
 
 class Notification(models.Model):

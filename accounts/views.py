@@ -1,22 +1,18 @@
 from django.contrib.auth import authenticate, get_user_model, login, logout
 from django.contrib.auth.decorators import login_required
-from django.contrib.auth.models import User
 from django.shortcuts import redirect, render
 from django.views.decorators.http import require_http_methods
-
 from posts.models import Post
 from .models import Profile, Follow
 
-
-def is_valid_name(str):
-    return len(str) >= 3 or len(str) <= 50
+User = get_user_model()
 
 
-# Create your views here.
+def is_valid_name(name):
+    return 3 <= len(name) <= 50
+
+
 def register(request):
-
-    User = get_user_model()
-
     if request.user.is_authenticated:
         return redirect("feed")
 
@@ -26,6 +22,7 @@ def register(request):
         last_name = request.POST.get("last_name", "")
         password = request.POST.get("password1", "")
         confirm_password = request.POST.get("password2", "")
+        
         context = {
             "username": username,
             "first_name": first_name,
@@ -34,67 +31,48 @@ def register(request):
             "password2": confirm_password,
         }
 
-        if not is_valid_name(username):
-            context["error"] = "Escriba un nombre de usuario en un rango de 3 a 50 caracteres."
-            return render(request, "register.html", context, status=400)
-        if not username.isalnum():
-            context["error"] = "Escriba un nombre que contenga letras minusculas, numeros"
+        if not (is_valid_name(username) and username.isalnum()):
+            context["error"] = "El nombre de usuario debe tener entre 3 y 50 caracteres alfanuméricos."
             return render(request, "register.html", context, status=400)
         
-        if not is_valid_name(first_name):
-            context["error"] = "Escriba un nombre en un rango de 3 a 50 caracteres."
+        if not all(map(is_valid_name, [first_name, last_name])):
+            context["error"] = "El nombre y apellido deben tener entre 3 y 50 caracteres."
             return render(request, "register.html", context, status=400)
-        if not is_valid_name(last_name):
-            context["error"] = "Escriba un apellido en un rango de 3 a 50 caracteres."
-            return render(request, "register.html", context, status=400)
+        
         if User.objects.filter(username=username).exists():
-            context["error"] = "Usuario ya existe, eliga otro usuario."
+            context["error"] = "El nombre de usuario ya existe, elija otro."
             return render(request, "register.html", context, status=400)
+        
         if password != confirm_password:
-            context["error"] = "La contraseña no es la misma, vuelva a intentarlo."
+            context["error"] = "Las contraseñas no coinciden, inténtelo de nuevo."
             return render(request, "register.html", context, status=400)
+        
         if len(password) < 8:
-            context["error"] = "La contraseña debe tener minimo 8 caracteres."
+            context["error"] = "La contraseña debe tener al menos 8 caracteres."
             return render(request, "register.html", context, status=400)
 
-        user = User.objects.create_user(username=username,
-                                        password=password,
-                                        first_name=first_name,
-                                        last_name=last_name,)
-        profile = Profile.objects.create(user=user)
-        profile.save()
-
-        user = authenticate(username=username, password=password)
+        user = User.objects.create_user(username=username, password=password, first_name=first_name, last_name=last_name)
+        Profile.objects.create(user=user)
         login(request, user)
-
         return redirect("user", user.username)
 
     return render(request, "register.html")
 
 
 def user(request, username):
-    user = User.objects.filter(username=username)
-    if not user.exists():
+    user = User.objects.filter(username=username).first()
+    if not user:
         return render(request, "404.html", status=404)
-    user = list(user)[0]
+    
     profile = Profile.objects.get(user=user)
     posts = Post.objects.filter(profile=profile).order_by("-created_at")
-
-    follow_status = False
-
-    my_user = request.user
-    my_profile = Profile.objects.get(user=my_user)
-
-    follow = Follow.objects.filter(follower=my_profile, followed=profile)
-
-    if follow.exists():
-        follow_status = True
-
+    follow_status = Follow.objects.filter(follower=request.user.profile, followed=profile).exists()
+    
     context = {
         "profile": profile,
         "user": user,
         "posts": posts,
-        "follow_status": follow_status
+        "follow_status": follow_status,
     }
 
     return render(request, "user.html", context)
@@ -103,37 +81,37 @@ def user(request, username):
 def log_in(request):
     if request.user.is_authenticated:
         return redirect("feed")
+    
     if request.method == "POST":
         username = request.POST.get("username", "")
         password = request.POST.get("password", "")
         user = authenticate(username=username, password=password)
-        context = {
-            "username": username,
-            "password": password
-        }
-        if user is None:
-            context["error"] = "El usuario y/o la contraseña es incorrecta."
+
+        if not user:
+            context = {"error": "Usuario o contraseña incorrectos.", "username": username}
             return render(request, "login.html", context, status=400)
+        
         login(request, user)
         return redirect("feed")
+    
     return render(request, "login.html")
 
 
-@login_required(redirect_field_name="log_in")
+@login_required
 @require_http_methods(["GET"])
 def log_out(request):
     logout(request)
     return redirect("log_in")
 
 
-@login_required(redirect_field_name="log_in")
+@login_required
 @require_http_methods(["POST"])
 def delete_user(request):
     request.user.delete()
     return redirect("login")
 
 
-@login_required(redirect_field_name="user")
+@login_required
 @require_http_methods(["POST"])
 def update_user(request):
     user = request.user
@@ -142,57 +120,33 @@ def update_user(request):
     first_name = request.POST.get("first_name", "")
     last_name = request.POST.get("last_name", "")
     bio = request.POST.get("bio", "")
-    context = {
-        "user": user,
-        "profile": profile
-    }
-    if not is_valid_name(first_name):
-        context["update_error"] = "Escriba un nombre en un rango de 3 a 50 caracteres."
-        return render(request, "user.html", context, status=400)
-    if not is_valid_name(last_name):
-        context["update_error"] = "Escriba un apellido en un rango de 3 a 50 caracteres."
-        return render(request, "user.html", context, status=400)
+    
+    if not all(map(is_valid_name, [first_name, last_name])):
+        return render(request, "user.html", {"update_error": "Nombre y apellido deben tener entre 3 y 50 caracteres.", "user": user, "profile": profile}, status=400)
+    
     if len(bio) > 160:
-        context["update_error"] = "Escriba una bio menor de 160 caracteres."
-        return render(request, "user.html", context, status=400)
+        return render(request, "user.html", {"update_error": "La biografía debe ser menor a 160 caracteres.", "user": user, "profile": profile}, status=400)
 
-    user.first_name = first_name
-    user.last_name = last_name
+    user.first_name, user.last_name = first_name, last_name
     profile.bio = bio
-
     user.save()
     profile.save()
 
     return redirect("user", user.username)
 
 
-@login_required(redirect_field_name="log_in")
+@login_required
 def follow_profile(request, username):
-    # TODO: Utilizar el toggle_follow del modelo Profile
-    user = User.objects.filter(username=username)
-    if not user.exists():
-        return redirect("user", user.username)
-    user = list(user)[0]
-    profile = Profile.objects.get(user=user)
-    follow_status = False
+    target_user = User.objects.filter(username=username).first()
+    if not target_user:
+        return redirect("user", request.user.username)
 
-    my_user = request.user
-    my_profile = Profile.objects.get(user=my_user)
+    target_profile = Profile.objects.get(user=target_user)
+    my_profile = request.user.profile
 
-    follow = Follow.objects.filter(follower=my_profile, followed=profile)
-    if request.method == "POST":
-        if follow.exists():
-            follow.delete()
-        else:
-            follow = Follow.objects.create(
-                follower=my_profile, followed=profile)
-            follow.save()
-            follow_status = True
-    else:
-        if follow.exists():
-            follow_status = True
-    context = {
-        "follow_status": follow_status,
-        "username": username
-    }
+    follow, created = Follow.objects.get_or_create(follower=my_profile, followed=target_profile)
+    if not created:
+        follow.delete()
+    
+    context = {"follow_status": created, "username": username}
     return render(request, "htmx/follow_status.html", context)

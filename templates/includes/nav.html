@@ -18,11 +18,7 @@
       </a>
     </li>
     <!-- Agregar vista htmx para notificaciones -->
-    <li class="nav__item">
-      <a class="nav__link" href="{% url 'notifications' %}">
-        <i class="material-icons">notifications</i>
-      </a>
-    </li>
+    <div hx-get="{% url 'notifications_button' %}" hx-swap="innerHTML" hx-trigger="load"></div>
     <li class="nav__item">
       <a class="nav__link" href="{% url 'log_out' %}">
         <i class="material-icons">logout</i>

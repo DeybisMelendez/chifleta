@@ -24,6 +24,10 @@
   text-decoration: none;
   transition: var(--transition-base);
 }
+.nav__link--alert{
+  color: var(--error-color)
+}
+
 .nav__link:hover {
   color: var(--primary-color);
 }

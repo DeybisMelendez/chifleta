@@ -47,3 +47,16 @@ def check_all_notification(request):
         notification.save()
 
     return redirect("notification")
+
+
+def notifications_button(request):
+    user = request.user
+    profile = Profile.objects.get(user=user)
+    
+    has_notifications= Notification.objects.filter(profile=profile,is_read=True).exists()
+    print(has_notifications)
+    context={
+        "has_notifications": has_notifications
+    }
+    
+    return render(request, "htmx/notification_button.html", context)

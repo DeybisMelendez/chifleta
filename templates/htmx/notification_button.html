@@ -3,7 +3,7 @@ Contexto:
   bool has_notifications
 {% endcomment %}
 
-{% if has_notifications %}
+{% if has_notifications == True %}
 <li class="nav__item">
   <a class="nav__link nav__link--alert" href="{% url 'notifications' %}">
     <i class="material-icons">notifications</i>
