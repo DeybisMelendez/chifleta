@@ -1,9 +1,14 @@
-<nav class="nav" x-data="{open:false}">
+<nav class="nav" x-data="{open:false, modal_type:''}">
   <p class="nav__brand">Chifleta</p>
   <ul class="nav__menu">
     {% if request.user.is_authenticated %}
     <li class="nav__item">
-      <a class="nav__link" href="#" @click="open=true">
+      <a class="nav__link" href="#" @click="open=true;modal_type = 'search'">
+        <i class="material-icons">search</i>
+      </a>
+    </li>
+    <li class="nav__item">
+      <a class="nav__link" href="#" @click="open=true;modal_type = 'post'">
         <i class="material-icons">add</i>
       </a>
     </li>
@@ -37,13 +42,21 @@
   <div class="modal" x-show="open">
     <div class="modal__content">
       <span class="modal__close" @click="open=false"><i class="material-icons">close</i></span>
-      <form class="form" method="post" action="{% url 'add_post' %}">
+      <form x-show="modal_type=='post'" class="form" method="post" action="{% url 'add_post' %}">
         <h1 class="form__title">Nuevo post</h1>
         {% csrf_token %}
         <div class="form__field">
           <textarea class="form__input" type="text" name="content" placeholder="¿Qué novedades tienes?" required></textarea>
         </div>
         <button class="form__submit" type="submit">Publicar</button>
+      </form>
+      <form x-show="modal_type=='search'" class="form" method="post" action="{% url 'search' %}">
+        <h1 class="form__title">Búsqueda</h1>
+        {% csrf_token %}
+        <div class="form__field">
+          <textarea class="form__input" type="text" name="search" placeholder="¿Qué desea buscar?" required></textarea>
+        </div>
+        <button class="form__submit" type="submit">Buscar</button>
       </form>
     </div>
   </div>

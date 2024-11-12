@@ -23,6 +23,7 @@ from accounts.views import (delete_user, follow, log_in, log_out,
 from notifications.views import (check_all_notification, check_notification,
                                 notifications,notifications_button)
 from posts.views import (add_post, delete_post, feed,post_comment, post_share, post_view)
+from search.views import search_all
 
 urlpatterns = [
     path("admin/", admin.site.urls),
@@ -49,7 +50,8 @@ urlpatterns = [
     path("notifications/<int:pk>/", check_notification, name="check_notification"),
     path("notifications/check_all", check_all_notification, name="check_all_notification"),
     
-    path("htmx/notification_button", notifications_button, name="notifications_button")
+    path("htmx/notification_button", notifications_button, name="notifications_button"),
+    path("search", search_all, name="search")
 
 ]
 
