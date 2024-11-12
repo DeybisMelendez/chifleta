@@ -3,7 +3,8 @@ from django.contrib.auth.models import User
 from django.db.models import Q
 from django.shortcuts import redirect, render
 from django.views.decorators.http import require_http_methods
-
+from datetime import datetime
+from datetime import timedelta
 from accounts.models import Follow, Profile
 
 from .models import Post
@@ -19,6 +20,17 @@ def feed(request):
 
     posts = Post.objects.filter(Q(profile_id__in=followed_ids) | Q(
         profile=profile) & Q(parent__isnull=True)).order_by("-created_at")
+
+    context = {
+        "posts": posts
+    }
+    return render(request, "feed.html", context)
+
+
+@login_required(redirect_field_name="log_in")
+def discover(request):
+
+    posts = Post.objects.filter(Q(created_at__gte=datetime.now()-timedelta(days = 10)) & Q(parent__isnull=True)).order_by("-comments_count","-likes_count","-shares_count","-created_at")
 
     context = {
         "posts": posts
