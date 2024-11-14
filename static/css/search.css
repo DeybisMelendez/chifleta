@@ -1,0 +1,26 @@
+.search__title {
+  border-bottom: var(--visible-border);
+  padding: var(--padding-base);
+}
+.search__nav {
+  border-bottom: var(--visible-border);
+  display: flex;
+}
+
+.search__button {
+  padding: var(--padding-base);
+  width: 50%;
+  text-align: center;
+  transition: var(--transition-base);
+}
+.search__button:hover {
+  background-color: var(--background-hover-color);
+}
+
+.search__button--right-border {
+  border-right: var(--visible-border);
+}
+.search__button--actived {
+  background-color: var(--background-hover-color);
+  cursor: not-allowed;
+}
