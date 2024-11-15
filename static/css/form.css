@@ -3,14 +3,17 @@
   flex-direction: column;
   padding: var(--padding-base);
   border-bottom: var(--visible-border);
+  background-color: var(--background-color);
 }
-
+.form--without-border {
+  border-bottom: none;
+}
 .form__title {
   text-align: center;
   font-weight: 600;
   font-size: 1.5rem;
-  margin-top: 20px;
-  margin-bottom: 40px;
+  margin-top: 12px;
+  margin-bottom: 12px;
 }
 .form__field {
   width: 100%;
@@ -25,14 +28,16 @@
   background-color: #ddd;
   padding: 18px;
   border-radius: 12px;
+  border: 1px solid var(--text-secondary-color);
   transition: var(--transition-base);
+  color: var(--text-color);
 }
 .form__submit {
   width: 100%;
-  background-color: #111;
+  background-color: var(--background-button-color);
   padding: 20px;
   border-radius: 12px;
-  color: #eee;
+  color: var(--text-button-color);
   margin-bottom: 20px;
   transition: var(--transition-base);
 }
@@ -40,7 +45,7 @@
   background-color: var(--primary-color);
 }
 .form__question-link {
-  color: #19e;
+  color: var(--secondary-color);
   text-decoration: none;
 }
 .form__question-link:hover {

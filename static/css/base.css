@@ -1,33 +1,44 @@
 :root {
-  --visible-border: 1px solid #999;
+  --visible-border: 2px solid #abc;
   --padding-base: 20px;
-  --text-color: #111;
-  --text-secondary-color: #999;
+  --text-color: #123;
+  --text-secondary-color: #789;
+  --text-button-color: #eee;
+  --background-button-color: #123;
+  --hover-button-color: #234;
+  --background-main-color: #ccc;
   --background-color: #eee;
   --background-hover-color: #ddd;
-  --primary-color: #55c;
+  --primary-color: #66e;
   --secondary-color: #19e;
   --error-color: #c55;
+  --alert-color: #c55;
   --success-color: #5c5;
   --transition-base: all 0.3s ease-in-out;
 }
 
 body {
-  background-color: var(--background-color);
+  background-color: var(--background-main-color);
+  /*background: linear-gradient(90deg, rgba(170,170,170,1) 0%, rgba(238,238,238,1) 100%);*/
 }
 
 .container {
-  max-width: 720px;
+  max-width: 800px;
   min-height: 100vh;
   margin: auto;
   border-left: var(--visible-border);
   border-right: var(--visible-border);
+  display: flex;
+  flex-direction: column;
 }
-.main {
-  position:fixed;
+main {
+  flex: 1;
 }
 
 .footer {
   padding: var(--padding-base);
-  text-align: center;
+  display: flex;
+  align-items: end;
+  justify-content: center;
+  background-color: var(--background-color);
 }

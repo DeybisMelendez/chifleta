@@ -1,12 +1,6 @@
 {% extends "layouts/base.html" %}
 {% load static %}
 
-{% comment %}
-  Contexto:
-  User user
-  Profile profile
-{% endcomment %}
-
 {% block title %}
   {{user.username}}
 {% endblock title %}
@@ -56,7 +50,7 @@
           <span class="modal__close" @click="open=false">
             <i class="material-icons">close</i>
           </span>
-          <form class="form" method="post" action="{% url 'update_user' %}">
+          <form class="form form--without-border" method="post" action="{% url 'update_user' %}">
             <h1 class="form__title">Editar usuario</h1>
             {% csrf_token %}
             <div class="form__field">
@@ -85,9 +79,7 @@
                 type="text"
                 name="bio"
                 placeholder="Escribe una biografía"
-                value="{{profile.bio}}"
-                required>
-              </textarea>
+                value="{{profile.bio}}"></textarea>
             </div>
             <button class="form__submit" type="submit">Guardar</button>
           </form>

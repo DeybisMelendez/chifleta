@@ -7,7 +7,9 @@ from .models import Notification
 @login_required(redirect_field_name="log_in")
 def notifications(request):
     notifications = Notification.objects.filter(profile__user=request.user)
-
+    for notification in notifications:
+        notification.is_read = True
+        notification.save()
     context = {
         "notifications": notifications
     }
@@ -42,7 +44,7 @@ def check_all_notification(request):
 
 def notifications_button(request):
 
-    has_notifications= Notification.objects.filter(profile__user=request.user,is_read=True).exists()
+    has_notifications= Notification.objects.filter(profile__user=request.user, is_read=False).exists()
     context={
         "has_notifications": has_notifications
     }

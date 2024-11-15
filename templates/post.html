@@ -1,13 +1,6 @@
 {% extends "layouts/base.html" %}
 {% load static %}
 
-{% comment %}
-  Contexto:
-  list[Post]: parent_posts // ordenado por padre-hijo
-  Post: post // objeto post a ver
-  list[Post]: comments // posts que sean comentarios del post a ver
-{% endcomment %}
-
 {% block title %}
   {{ post.profile }}
 {% endblock title %}

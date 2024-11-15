@@ -22,8 +22,7 @@
         <i class="material-icons">person</i>
       </a>
     </li>
-    <!-- Agregar vista htmx para notificaciones -->
-    <div hx-get="{% url 'notifications_button' %}" hx-swap="innerHTML" hx-trigger="load"></div>
+    <div hx-get="{% url 'notifications_button' %}" hx-swap="outerHTML" hx-trigger="load"></div>
     <li class="nav__item">
       <a class="nav__link" href="{% url 'log_out' %}">
         <i class="material-icons">logout</i>
@@ -40,21 +39,37 @@
   </ul>
   {% if request.user.is_authenticated %}
   <div class="modal" x-show="open">
-    <div class="modal__content">
+    <div class="modal__content" @click.outside="open=false" @keyup.escape.window="open=false">
       <span class="modal__close" @click="open=false"><i class="material-icons">close</i></span>
-      <form x-show="modal_type=='post'" class="form" method="post" action="{% url 'add_post' %}">
+      <form
+        x-show="modal_type=='post'"
+        class="form form--without-border"
+        method="post"
+        action="{% url 'add_post' %}">
         <h1 class="form__title">Nuevo post</h1>
         {% csrf_token %}
         <div class="form__field">
-          <textarea class="form__input" type="text" name="content" placeholder="¿Qué novedades tienes?" required></textarea>
+          <textarea
+            class="form__input"
+            rows="4"
+            name="content"
+            placeholder="¿Qué novedades tienes?" required></textarea>
         </div>
         <button class="form__submit" type="submit">Publicar</button>
       </form>
-      <form x-show="modal_type=='search'" class="form" method="post" action="{% url 'search' %}">
+      <form
+        x-show="modal_type=='search'"
+        class="form form--without-border"
+        method="post"
+        action="{% url 'search' %}">
         <h1 class="form__title">Búsqueda</h1>
         {% csrf_token %}
         <div class="form__field">
-          <textarea class="form__input" type="text" name="search" placeholder="¿Qué desea buscar?" required></textarea>
+          <textarea
+            class="form__input"
+            rows="4" name="search"
+            placeholder="¿Qué desea buscar?"
+            required></textarea>
         </div>
         <button class="form__submit" type="submit">Buscar</button>
       </form>

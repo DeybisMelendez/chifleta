@@ -1,5 +1,6 @@
 .user {
   border-bottom: var(--visible-border);
+  background-color: var(--background-color);
   padding: var(--padding-base);
 }
 .user__info {
@@ -23,8 +24,8 @@
 .user__button {
   width: 100;
   padding: 18px;
-  background-color: #111;
-  color: #eee;
+  background-color: var(--background-button-color);
+  color: var(--text-button-color);
   border-radius: 12px;
   transition: var(--transition-base);
 }

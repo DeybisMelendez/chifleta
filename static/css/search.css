@@ -1,3 +1,6 @@
+.search {
+  background-color: var(--background-color);
+}
 .search__title {
   border-bottom: var(--visible-border);
   padding: var(--padding-base);

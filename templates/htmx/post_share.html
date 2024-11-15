@@ -3,19 +3,17 @@
     <span class="modal__close" @click.stop="open=false">
       <i class="material-icons">close</i>
     </span>
-    <form class="form" method="post" action="{% url 'post_share' post.id %}">
+    <form class="form form--without-border" method="post" action="{% url 'post_share' post.id %}">
       <h1 class="form__title">Compartir post</h1>
       {% csrf_token %}
       <div class="form__field">
         <textarea
           class="form__input"
-          type="text"
           name="content"
           placeholder="¿Qué novedades tienes?"
-          required>
-        </textarea>
+          required></textarea>
       </div>
-      {% include "includes/post.html" with hide_buttons=True %}
+      {% include "includes/post.html" with hide_buttons=True is_node=True %}
       <button class="form__submit" type="submit">Compartir</button>
     </form>
   </div>
