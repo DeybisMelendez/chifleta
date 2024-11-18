@@ -1,0 +1,21 @@
+{% if is_like %}
+<button
+  class="post__button post_button--like"
+  @click.stop=""
+  hx-trigger="click"
+  hx-post="{% url 'like' post.id %}"
+  hx-swap="outerHTML"
+  @click="likes--">
+  <i class="material-icons">star</i>
+</button>
+{% else %}
+<button
+  class="post__button"
+  @click.stop=""
+  hx-trigger="click"
+  hx-post="{% url 'like' post.id %}"
+  hx-swap="outerHTML"
+  @click="likes++">
+  <i class="material-icons">star</i>
+</button>
+{% endif %}

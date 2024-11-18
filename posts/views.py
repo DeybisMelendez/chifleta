@@ -7,7 +7,7 @@ from datetime import datetime
 from datetime import timedelta
 from accounts.models import Follow, Profile
 
-from .models import Post
+from .models import Post, Like
 
 
 @login_required(redirect_field_name="log_in")
@@ -18,16 +18,19 @@ def feed(request):
     followed_ids = Follow.objects.filter(
         follower=profile).values_list("followed_id", flat=True)
 
-    posts = Post.objects.filter(Q(profile_id__in=followed_ids) | Q(
+    posts_following = Post.objects.filter(Q(profile_id__in=followed_ids) | Q(
         profile=profile) & Q(parent__isnull=True)).order_by("-created_at")
+    
+    posts_for_you = Post.objects.filter(Q(created_at__gte=datetime.now()-timedelta(days = 10)) & Q(parent__isnull=True)).order_by("-comments_count","-likes_count","-shares_count","-created_at")
 
     context = {
-        "posts": posts
+        "posts_following": posts_following,
+        "posts_for_you": posts_for_you
     }
     return render(request, "feed.html", context)
 
 
-@login_required(redirect_field_name="log_in")
+"""@login_required(redirect_field_name="log_in")
 def discover(request):
 
     posts = Post.objects.filter(Q(created_at__gte=datetime.now()-timedelta(days = 10)) & Q(parent__isnull=True)).order_by("-comments_count","-likes_count","-shares_count","-created_at")
@@ -35,7 +38,7 @@ def discover(request):
     context = {
         "posts": posts
     }
-    return render(request, "feed.html", context)
+    return render(request, "feed.html", context)"""
 
 
 def post_view(request, id):
@@ -95,7 +98,7 @@ def post_comment(request, pk):
         post = Post.objects.create(
             profile=profile, content=content, parent=parent)
         post.save()
-        return redirect("feed")
+        return redirect("post", post.id)
 
     post = Post.objects.filter(pk=pk)
     if not post.exists():
@@ -122,7 +125,7 @@ def post_share(request, pk):
         post = Post.objects.create(
             profile=profile, content=content, share=share)
         post.save()
-        return redirect("feed")
+        return redirect("post", post.id)
 
     post = Post.objects.filter(pk=pk)
     if not post.exists():
@@ -135,3 +138,29 @@ def post_share(request, pk):
     }
 
     return render(request, "htmx/post_share.html", context)
+
+@login_required(redirect_field_name="log_in")
+def like(request, pk):
+    post = Post.objects.filter(pk=pk)
+    
+    if not post.exists():
+        redirect("log_in")
+    
+    post = post.first()
+    profile = Profile.objects.get(user=request.user)
+    like = Like.objects.filter(post=post, profile=profile)
+    is_like = like.exists()
+    if request.method == "POST":
+        if is_like:
+            like.first().delete()
+            is_like = False
+        else:
+            like = Like.objects.create(post=post, profile=profile)
+            is_like = True
+    
+    context = {
+        "is_like": is_like,
+        "post": post
+    }
+
+    return render(request, "htmx/like.html", context)

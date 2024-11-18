@@ -1,6 +1,7 @@
 .posts {
   display: flex;
   flex-direction: column;
+  background-color: var(--background-color);
 }
 .posts__parent {
   display: block;
@@ -84,6 +85,9 @@
   color: var(--text-color);
   transition: var(--transition-base);
   background: none;
+}
+.post_button--like {
+  color: var(--primary-color);
 }
 
 .post__button:hover,

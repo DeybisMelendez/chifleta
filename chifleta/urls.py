@@ -18,11 +18,11 @@ from django.contrib import admin
 from django.urls import path
 
 from accounts.views import (delete_user, follow, log_in, log_out,
-                            register, update_user, user, list_followers,
-                        list_following, )
+                            register, update_user, user, list_followers)
 from notifications.views import (check_all_notification, check_notification,
                                 notifications,notifications_button)
-from posts.views import (add_post, delete_post, feed,post_comment, post_share, post_view,discover)
+from posts.views import (add_post, delete_post, feed,post_comment, post_share, 
+                        post_view,like)
 from search.views import search_all
 
 urlpatterns = [
@@ -33,8 +33,8 @@ urlpatterns = [
     path("register/", register, name="register"),
     path("user/<str:username>/", user, name="user"),
     path("user/<str:username>/follow/",follow, name="follow_status"),
-    path("user/<str:username>/followers/", list_followers, name="list_followers"),
-    path("user/<str:username>/following/", list_following, name="list_following"),
+    path("user/<str:username>/followers/", list_followers, name="followers"),
+    #path("user/<str:username>/following/", list_following, name="list_following"),
     path("user/logout", log_out, name="log_out"),
     path("user/delete", delete_user, name="delete_user"),
     path("user/update", update_user, name="update_user"),
@@ -45,6 +45,7 @@ urlpatterns = [
     path("post/<int:pk>/delete", delete_post, name="delete_post"),
     path("post/<int:pk>/comment", post_comment, name="post_comment"),
     path("post/<int:pk>/share", post_share, name="post_share"),
+    path("post/<int:pk>/like", like, name="like"),
     
     path("notifications/", notifications, name="notifications"),
     path("notifications/<int:pk>/", check_notification, name="check_notification"),
@@ -52,7 +53,8 @@ urlpatterns = [
     
     path("htmx/notification_button", notifications_button, name="notifications_button"),
     path("search", search_all, name="search"),
-    path("discover", discover, name="discover")
+    #path("discover", discover, name="discover"),
+    
 
 ]
 

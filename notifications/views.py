@@ -6,10 +6,11 @@ from .models import Notification
 
 @login_required(redirect_field_name="log_in")
 def notifications(request):
-    notifications = Notification.objects.filter(profile__user=request.user)
+    notifications = Notification.objects.filter(profile__user=request.user).order_by("-created_at")
     for notification in notifications:
         notification.is_read = True
         notification.save()
+        
     context = {
         "notifications": notifications
     }

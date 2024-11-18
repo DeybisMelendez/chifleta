@@ -21,14 +21,14 @@
       <h2 class="user__fullname">{{user.first_name}} {{user.last_name}}</h2>
       <pre class="user__bio">{{profile.bio}}</pre>
     </div>
-    <div class="user__followers">
+    <a class="user__followers" href="{% url 'followers' user.username %}">
       <p class="user__follower-count">
-        <strong>{{profile.followers_count}}</strong>seguidores
+        <strong>{{profile.followers_count}}</strong> seguidores
       </p>
       <p class="user__follower-count">
         <strong>{{profile.following_count}}</strong> seguidos
       </p>
-    </div>
+    </a>
     {% if request.user.is_authenticated %}
     <div x-data="{open:false}">
       {% if user.username == request.user.username %}

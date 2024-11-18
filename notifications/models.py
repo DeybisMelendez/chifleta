@@ -10,7 +10,7 @@ from posts.models import Post, Like
 def create_notification_for_like(sender, instance, created, **kwargs):
     if created and instance.profile.pk != instance.post.profile.pk:
         notification = Notification.objects.create(
-            notification_type="like", follower=instance.profile, profile=instance.post.profile)
+            notification_type="like", follower=instance.profile, profile=instance.post.profile, post=instance.post)
         notification.save()
 
 @receiver(post_save, sender=Follow)

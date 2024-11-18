@@ -8,25 +8,26 @@
 {% block styles %}
   <link rel="stylesheet" href="{% static 'css/posts.css' %}">
   <link rel="stylesheet" href="{% static 'css/search.css' %}">
+  <link rel="stylesheet" href="{% static 'css/select.css' %}">
 {% endblock styles %}
 
 {% block content %}
 <main class="search" x-data="{open:'posts'}">
   <section>
     <h1 class="search__title">Resultado de Búsqueda</h1>
-    <div class="search__nav">
+    <nav class="select">
       <a
-        class="search__button search__button--right-border"
+        class="select__button select__button--right-border"
         @click="open='posts'"
-        :class = "open=='posts' ? 'search__button--actived':''" >
+        :class = "open=='posts' ? 'select__button--actived':''" >
         Posts
       </a>
       <a 
-        class="search__button" @click="open='profiles'" 
-        :class = "open=='profiles' ? 'search__button--actived':''">
+        class="select__button" @click="open='profiles'" 
+        :class = "open=='profiles' ? 'select__button--actived':''">
         Perfiles
       </a>
-    </div>
+    </nav>
   </section>
   <section x-show="open=='posts'">
     {% for post in posts %}
@@ -35,13 +36,13 @@
   </section>
   <section x-show="open=='profiles'">
     {% for profile in profiles %}
-      <div>
-        <span>
-          {{profile.created_at}}
-        </span>
-        <a href="{% url 'user' profile.user %}">{{profile.user.username}}</a>
-        <p>{{profile.user.first_name}}</p>
-        <p>{{profile.user.last_name}}</p>
+      <div class="profile">
+        <p class="profile__date">
+          Se unió {{profile.created_at}}
+        </p>
+        <a href="{% url 'user' profile.user %}" class="profile__user">{{profile.user.username}}</a>
+        <p class="profile__name">{{profile.user.first_name}} {{profile.user.last_name}}</p>
+        <p class="profile__bio">{{profile.bio}}</p>
       </div>
     {% endfor %}
   </section>

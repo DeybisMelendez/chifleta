@@ -140,15 +140,17 @@ def list_followers(request, username):
         return redirect("feed")
     profile = profile.first()
     followers = Follow.objects.filter(followed=profile)
+    following = Follow.objects.filter(follower=profile)
 
     context = {
-        "followers": followers
+        "followers": followers,
+        "following": following
     }
 
     return render(request, "followers.html", context)
 
 
-def list_following(request, username):
+"""def list_following(request, username):
     profile = Profile.objects.filter(user__username=username)
     if not profile.exists():
         return redirect("feed")
@@ -158,4 +160,4 @@ def list_following(request, username):
     context = {
         "following": following
     }
-    return render(request, "followers.html", context)
+    return render(request, "followers.html", context)"""
