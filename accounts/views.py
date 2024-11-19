@@ -49,8 +49,11 @@ def user(request, username):
 
     profile = Profile.objects.get(user=user)
     posts = Post.objects.filter(profile=profile).order_by("-created_at")
-    follow_status = Follow.objects.filter(
-        follower=request.user.profile, followed=profile).exists()
+    follow_status = False
+    if request.user.is_authenticated:
+
+        follow_status = Follow.objects.filter(
+            follower__user=request.user, followed=profile).exists()
 
     context = {
         "profile": profile,
@@ -81,21 +84,21 @@ def log_in(request):
     return render(request, "login.html")
 
 
-@login_required
+@login_required(login_url="log_in")
 @require_http_methods(["GET"])
 def log_out(request):
     logout(request)
     return redirect("log_in")
 
 
-@login_required
+@login_required(login_url="log_in")
 @require_http_methods(["POST"])
 def delete_user(request):
     request.user.delete()
     return redirect("login")
 
 
-@login_required
+@login_required(login_url="log_in")
 @require_http_methods(["POST"])
 def update_user(request):
     user = request.user
@@ -116,7 +119,7 @@ def update_user(request):
     return redirect("user", user.username)
 
 
-@login_required
+@login_required(login_url="log_in")
 def follow(request, username):
 
     target_profile = Profile.objects.get(user__username=username)

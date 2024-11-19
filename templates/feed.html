@@ -12,6 +12,7 @@
 
 {% block content %}
 <main x-data="{open:'for_you'}">
+  {% if request.user.is_authenticated%}
   <nav class="select">
     <a 
       class="select__button select__button--right-border" @click="open='for_you'" 
@@ -26,23 +27,32 @@
     </a>
     
   </nav>
+  {%endif%}
+  {% if posts_following %}
   <section class="posts" x-show="open=='following'">
-    {% if posts_following %}
       {% for post in posts_following %}
         {% include "includes/post.html" with target_type="following" %}
       {% endfor %}
-    {% else %}
-    <p class="posts__empty">No hay posts para mostrar.</p>
-    {% endif %}
   </section>
-  <section class="posts" x-show="open=='for_you'">
-    {% if posts_for_you %}
+  {% else %}
+    {% if request.user.is_authenticated %}
+      <section class="posts">
+        <p class="posts__empty">No hay posts para mostrar.</p>
+      </section>
+    {% endif %}
+  {% endif %}
+  {% if posts_for_you %}
+  <section class="posts" x-show="open=='for_you'">  
       {% for post in posts_for_you %}
         {% include "includes/post.html" with target_type="for_you" %}
       {% endfor %}
-    {% else %}
-    <p class="posts__empty">No hay posts para mostrar.</p>
-    {% endif %}
+    
+    
   </section>
+  {% else %}
+  <section class="posts">
+    <p class="posts__empty">No hay posts para mostrar.</p>
+  </section>
+  {% endif %}
 </main>
 {% endblock content %}

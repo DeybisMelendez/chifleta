@@ -66,6 +66,7 @@
         <p class="post__stat-value">{{post.likes_count}}</p>
       {% endif %}
     </div>
+    {% if request.user.is_authenticated %}
     <div class="post__stat">
       <button class="post__button"
         type="button"
@@ -90,6 +91,7 @@
       </button>
       <p class="post__stat-value">{{post.shares_count}}</p>
     </div>
+    {% endif %}
   </div>
   {% endif %}
 </div>

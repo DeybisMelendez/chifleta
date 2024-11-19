@@ -8,6 +8,11 @@
   padding: 1px;
   background: linear-gradient(#aaa, #eee);
 }
+@media (prefers-color-scheme: dark) {
+  .posts__parent {
+    background: linear-gradient(#111, #333);
+  }
+}
 .posts__empty {
   padding: var(--padding-base);
   height: 80vh;

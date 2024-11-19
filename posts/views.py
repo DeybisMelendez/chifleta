@@ -10,17 +10,17 @@ from accounts.models import Follow, Profile
 from .models import Post, Like
 
 
-@login_required(redirect_field_name="log_in")
+
 def feed(request):
     profile = Profile.objects.filter(
         user__username=request.user.username).first()
 
     followed_ids = Follow.objects.filter(
         follower=profile).values_list("followed_id", flat=True)
-
-    posts_following = Post.objects.filter(Q(profile_id__in=followed_ids) | Q(
-        profile=profile) & Q(parent__isnull=True)).order_by("-created_at")
-    
+    posts_following = None
+    if request.user.is_authenticated:
+        posts_following = Post.objects.filter(Q(profile_id__in=followed_ids) | Q(
+            profile=profile) & Q(parent__isnull=True)).order_by("-created_at")
     posts_for_you = Post.objects.filter(Q(created_at__gte=datetime.now()-timedelta(days = 10)) & Q(parent__isnull=True)).order_by("-comments_count","-likes_count","-shares_count","-created_at")
 
     context = {
@@ -30,7 +30,7 @@ def feed(request):
     return render(request, "feed.html", context)
 
 
-"""@login_required(redirect_field_name="log_in")
+"""@login_required(login_url="log_in")
 def discover(request):
 
     posts = Post.objects.filter(Q(created_at__gte=datetime.now()-timedelta(days = 10)) & Q(parent__isnull=True)).order_by("-comments_count","-likes_count","-shares_count","-created_at")
@@ -42,7 +42,11 @@ def discover(request):
 
 
 def post_view(request, id):
-    post = Post.objects.get(pk=id)
+    
+    post = Post.objects.filter(pk=id)
+    if not post.exists():
+        return render(request, "404.html", status=404)
+    post = post.first()
     comments = Post.objects.filter(parent=post.id)
 
     parents = Post.objects.none()
@@ -61,7 +65,7 @@ def post_view(request, id):
     return render(request, "post.html", context)
 
 
-@login_required(redirect_field_name="log_in")
+@login_required(login_url="log_in")
 @require_http_methods(["POST"])
 def add_post(request):
     profile = Profile.objects.get(user=request.user)
@@ -72,7 +76,7 @@ def add_post(request):
     return redirect("feed")
 
 
-@login_required(redirect_field_name="log_in")
+@login_required(login_url="log_in")
 def delete_post(request, pk):
     profile = Profile.objects.get(user__username=request.user.username)
     post = Post.objects.filter(pk=pk)
@@ -85,7 +89,7 @@ def delete_post(request, pk):
     return redirect("feed")
 
 
-@login_required(redirect_field_name="log_in")
+@login_required(login_url="log_in")
 def post_comment(request, pk):
     user = request.user
     profile = Profile.objects.get(user=user)
@@ -111,7 +115,7 @@ def post_comment(request, pk):
     return render(request, "htmx/post_comment.html", context)
 
 
-@login_required(redirect_field_name="log_in")
+@login_required(login_url="log_in")
 def post_share(request, pk):
     user = request.user
     profile = Profile.objects.get(user=user)
@@ -139,14 +143,19 @@ def post_share(request, pk):
 
     return render(request, "htmx/post_share.html", context)
 
-@login_required(redirect_field_name="log_in")
+
 def like(request, pk):
     post = Post.objects.filter(pk=pk)
-    
     if not post.exists():
         redirect("log_in")
     
     post = post.first()
+    if not request.user.is_authenticated:
+        context = {
+            "is_like": False,
+            "post": post
+        }
+        return render(request, "htmx/like.html", context)
     profile = Profile.objects.get(user=request.user)
     like = Like.objects.filter(post=post, profile=profile)
     is_like = like.exists()

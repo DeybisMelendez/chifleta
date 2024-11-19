@@ -1,14 +1,18 @@
 :root {
-  --visible-border: 2px solid #abc;
+  color-scheme: light dark;
+  --visible-border: 2px solid light-dark(#abc,#789);
   --padding-base: 20px;
-  --text-color: #123;
-  --text-secondary-color: #789;
-  --text-button-color: #eee;
-  --background-button-color: #123;
-  --hover-button-color: #234;
-  --background-main-color: #ccc;
-  --background-color: #eee;
-  --background-hover-color: #ddd;
+  --text-color: light-dark(#123,#cde);
+  --text-secondary-color: light-dark(#789,#abc);
+  --text-button-color: light-dark(#eee, #333);
+  --background-button-color: light-dark(#123,#cde);
+  --hover-button-color: light-dark(#234,#bcd);
+  --form-button-color: light-dark(#ddd,#222);
+  --background-main-color: light-dark(#ccc,#111);
+  --nav-background-color: light-dark(#dee, #334);
+  --footer-background-color: light-dark(#dee, #334);
+  --background-color: light-dark(#eee, #333);
+  --background-hover-color:light-dark( #ddd, #222);
   --primary-color: #66e;
   --secondary-color: #19e;
   --error-color: #c55;

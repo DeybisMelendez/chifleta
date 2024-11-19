@@ -1,0 +1,17 @@
+{% extends "layouts/base.html" %}
+{% load static %}
+
+{% block title %}
+  Página no encontrada
+{% endblock title %}
+
+{% block styles %}
+  <link rel="stylesheet" href="{% static 'css/error404.css' %}">
+{% endblock styles %}
+
+{% block content %}
+  <main class="error404">
+    <h1 class="error404__title">La página que intenta acceder no existe o fue eliminada</h1>
+  </main>
+
+{% endblock content %}

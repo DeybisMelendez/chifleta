@@ -28,7 +28,7 @@ from search.views import search_all
 urlpatterns = [
     path("admin/", admin.site.urls),
     
-    path("", log_in, name="index"),
+    path("", feed, name="index"),
     path("login/", log_in, name="log_in"),
     path("register/", register, name="register"),
     path("user/<str:username>/", user, name="user"),

@@ -3,13 +3,20 @@
   padding: 20px;
   display: flex;
   justify-content: space-between;
+  align-items: center;
   position: sticky;
   top: 0;
   overflow: hidden;
-  background-color: var(--background-color);
+  background-color: var(--nav-background-color);
 }
 .nav__brand {
   font-weight: bold;
+  color: var(--text-color);
+  text-decoration: none;
+  transition: var(--transition-base);
+  font-size: 1.5rem;
+}
+.nav__brand:hover {
   color: var(--primary-color);
 }
 .nav__menu {

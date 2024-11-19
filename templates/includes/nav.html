@@ -1,5 +1,5 @@
 <nav class="nav" x-data="{open:false, modal_type:''}">
-  <p class="nav__brand">Chifleta</p>
+  <a class="nav__brand" href="{% url 'feed' %}">Chifleta</a>
   <ul class="nav__menu">
     {% if request.user.is_authenticated %}
     <li class="nav__item">

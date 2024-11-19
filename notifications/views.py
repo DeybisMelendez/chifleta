@@ -4,7 +4,7 @@ from django.shortcuts import redirect, render
 from .models import Notification
 
 
-@login_required(redirect_field_name="log_in")
+@login_required(login_url="log_in")
 def notifications(request):
     notifications = Notification.objects.filter(profile__user=request.user).order_by("-created_at")
     for notification in notifications:
@@ -18,7 +18,7 @@ def notifications(request):
     return render(request, "notifications.html", context)
 
 
-@login_required(redirect_field_name="log_in")
+@login_required(login_url="log_in")
 def check_notification(_, pk):
 
     notifications = Notification.objects.filter(pk=pk)
