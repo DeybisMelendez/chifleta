@@ -1,0 +1,58 @@
+{% extends "layouts/base.html" %}
+{% load static %}
+
+{% block title %}
+  Feed
+{% endblock title %}
+
+{% block styles %}
+  <link rel="stylesheet" href="{% static 'css/posts.css' %}">
+  <link rel="stylesheet" href="{% static 'css/select.css' %}">
+{% endblock styles %}
+
+{% block content %}
+<main x-data="{open:'for_you'}">
+  {% if request.user.is_authenticated%}
+  <nav class="select">
+    <a 
+      class="select__button select__button--right-border" @click="open='for_you'" 
+      :class = "open=='for_you' ? 'select__button--actived':''">
+      Para ti
+    </a>
+    <a
+      class="select__button"
+      @click="open='following'"
+      :class = "open=='following' ? 'select__button--actived':''" >
+      Siguiendo
+    </a>
+    
+  </nav>
+  {%endif%}
+  {% if posts_following %}
+  <section class="posts" x-show="open=='following'">
+      {% for post in posts_following %}
+        {% include "includes/post.html" with target_type="following" %}
+      {% endfor %}
+  </section>
+  {% else %}
+    {% if request.user.is_authenticated %}
+      <section class="posts">
+        <p class="posts__empty">No hay posts para mostrar.</p>
+      </section>
+    {% endif %}
+  {% endif %}
+  {% if posts_for_you %}
+  <section class="posts" x-show="open=='for_you'">  
+      {% for post in posts_for_you %}
+        {% include "includes/post.html" with target_type="for_you" %}
+      {% endfor %}
+    
+    
+  </section>
+  {% else %}
+  <section class="posts">
+    <p class="posts__empty">No hay posts para mostrar.</p>
+  </section>
+  {% endif %}
+</main>
+{% endblock content %}

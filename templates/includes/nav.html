@@ -1,5 +1,79 @@
-<nav>
-  {% comment %}
-  TODO: Agregar navbar
-  {% endcomment %}
+<nav class="nav" x-data="{open:false, modal_type:''}">
+  <a class="nav__brand" href="{% url 'feed' %}">Chifleta</a>
+  <ul class="nav__menu">
+    {% if request.user.is_authenticated %}
+    <li class="nav__item">
+      <a class="nav__link" href="#" @click="open=true;modal_type = 'search'">
+        <i class="material-icons">search</i>
+      </a>
+    </li>
+    <li class="nav__item">
+      <a class="nav__link" href="#" @click="open=true;modal_type = 'post'">
+        <i class="material-icons">add</i>
+      </a>
+    </li>
+    <li class="nav__item">
+      <a class="nav__link" href="{% url 'feed' %}">
+        <i class="material-icons">home</i>
+      </a>
+    </li>
+    <li class="nav__item">
+      <a class="nav__link" href="{% url 'user' request.user.username %}">
+        <i class="material-icons">person</i>
+      </a>
+    </li>
+    <div hx-get="{% url 'notifications_button' %}" hx-swap="outerHTML" hx-trigger="load"></div>
+    <li class="nav__item">
+      <a class="nav__link" href="{% url 'log_out' %}">
+        <i class="material-icons">logout</i>
+      </a>
+    </li>
+    {% else %}
+    <li class="nav__item">
+      <a class="nav__link" href="{% url 'log_in' %}">Login</a>
+    </li>
+    <li class="nav__item">
+      <a class="nav__link" href="{% url 'register' %}">Register</a>
+    </li>
+    {% endif %}
+  </ul>
+  {% if request.user.is_authenticated %}
+  <div class="modal" x-show="open">
+    <div class="modal__content" @click.outside="open=false" @keyup.escape.window="open=false">
+      <span class="modal__close" @click="open=false"><i class="material-icons">close</i></span>
+      <form
+        x-show="modal_type=='post'"
+        class="form form--without-border"
+        method="post"
+        action="{% url 'add_post' %}">
+        <h1 class="form__title">Nuevo post</h1>
+        {% csrf_token %}
+        <div class="form__field">
+          <textarea
+            class="form__input"
+            rows="4"
+            name="content"
+            placeholder="¿Qué novedades tienes?" required></textarea>
+        </div>
+        <button class="form__submit" type="submit">Publicar</button>
+      </form>
+      <form
+        x-show="modal_type=='search'"
+        class="form form--without-border"
+        method="post"
+        action="{% url 'search' %}">
+        <h1 class="form__title">Búsqueda</h1>
+        {% csrf_token %}
+        <div class="form__field">
+          <textarea
+            class="form__input"
+            rows="4" name="search"
+            placeholder="¿Qué desea buscar?"
+            required></textarea>
+        </div>
+        <button class="form__submit" type="submit">Buscar</button>
+      </form>
+    </div>
+  </div>
+  {% endif %}
 </nav>

@@ -1,0 +1,34 @@
+.user {
+  border-bottom: var(--visible-border);
+  background-color: var(--background-color);
+  padding: var(--padding-base);
+}
+.user__info {
+  margin-bottom: 20px;
+}
+.user__username {
+  font-size: 2rem;
+  font-weight: 800;
+}
+.user__fullname {
+  font-size: 1.5rem;
+  font-weight: 400;
+}
+.user__followers {
+  display: flex;
+  margin-bottom: 20px;
+}
+.user__follower-count {
+  padding: 8px;
+}
+.user__button {
+  width: 100;
+  padding: 18px;
+  background-color: var(--background-button-color);
+  color: var(--text-button-color);
+  border-radius: 12px;
+  transition: var(--transition-base);
+}
+.user__button:hover {
+  background-color: var(--primary-color);
+}

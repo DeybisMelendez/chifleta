@@ -1,23 +1,51 @@
 {% extends "layouts/base.html" %}
-{% block title %}Inicio de sesión{% endblock title %}
+{% load static %}
+
+{% block title %}
+  Inicio de sesión
+{% endblock title %}
+
+{% block styles %}
+{% endblock styles %}
+
 {% block content %}
 <main>
-  <form method="post">
+  {% include "includes/messages.html" %}
+  <form class="form" method="post">
+    <h1 class="form__title">Inicio de Sesión</h1>
     {% csrf_token %}
-    
-    <div>
-      <label for="username">Usuario</label>
-      <input type="text" name="username" placeholder="Ingresa tu usuario" required>
+    <div class="form__field">
+      <label class="form__label" for="username">Usuario</label>
+      <input
+        class="form__input"
+        type="text"
+        name="username"
+        placeholder="Ingresa tu usuario"
+        value="{{username}}"
+        required
+      />
     </div>
-    
-    <div>
-      <label for="password">Contraseña</label>
-      <input type="password" name="password" placeholder="Ingresa tu contraseña" required>
+
+    <div class="form__field">
+      <label class="form__label" for="password">Contraseña</label>
+      <input
+        class="form__input"
+        type="password"
+        name="password"
+        placeholder="Ingresa tu contraseña"
+        value="{{password}}"
+        required
+      />
     </div>
+
+    <button class="form__submit" type="submit">Iniciar sesión</button>
     
-    <button type="submit">Iniciar sesión</button>
+    <p class="form__question">
+      ¿No tienes una cuenta?
+      <a class="form__question-link" href="{% url 'register' %}">
+        Regístrate
+      </a>
+    </p>
   </form>
-  
-  <p>¿No tienes una cuenta? <a href="{% url 'register' %}">Regístrate aquí</a></p>
 </main>
 {% endblock content %}

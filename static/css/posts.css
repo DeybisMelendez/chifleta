@@ -1,0 +1,118 @@
+.posts {
+  display: flex;
+  flex-direction: column;
+  background-color: var(--background-color);
+}
+.posts__parent {
+  display: block;
+  padding: 1px;
+  background: linear-gradient(#aaa, #eee);
+}
+@media (prefers-color-scheme: dark) {
+  .posts__parent {
+    background: linear-gradient(#111, #333);
+  }
+}
+.posts__empty {
+  padding: var(--padding-base);
+  height: 80vh;
+}
+
+.post {
+  background-color: var(--background-color);
+  border-bottom: var(--visible-border);
+  padding: var(--padding-base);
+  text-decoration: none;
+  color: var(--text-color);
+  transition: var(--transition-base);
+  cursor: pointer;
+}
+
+.post--node {
+  background-color: var(--background-color);
+  margin: var(--padding-base);
+  /*margin-left: 20px;
+  margin-right: 20px;*/
+  border-radius: 8px;
+  border: var(--visible-border);
+}
+.post:hover {
+  background-color: var(--background-hover-color);
+}
+.post__info {
+  margin-bottom: 1.5rem;
+}
+.post__info--share {
+  background-color: var(--background-color);
+  padding: 8px;
+  border-radius: 8px;
+  border: var(--visible-border);
+}
+.post__header {
+  display: flex;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  line-height: 2rem;
+}
+.post__title {
+  display: flex;
+}
+.post__user {
+  font-size: 1rem;
+  color: var(--text-color);
+  text-decoration: none;
+  font-weight: 800;
+  margin-right: 8px;
+  transition: var(--transition-base);
+}
+.post__user:hover {
+  color: var(--primary-color);
+  text-decoration: underline;
+}
+.post__date {
+  font-size: 0.75rem;
+  font-weight: 200;
+  color: var(--text-secondary-color);
+}
+.post__content {
+  overflow-wrap: break-word;
+  text-wrap: balance;
+}
+.post__stats {
+  display: flex;
+}
+.post__stat {
+  display: flex;
+  align-items: center;
+  margin-right: 8px;
+}
+.post__button {
+  color: var(--text-color);
+  transition: var(--transition-base);
+  background: none;
+}
+.post_button--like {
+  color: var(--primary-color);
+}
+
+.post__button:hover,
+.post__button--selected {
+  color: var(--primary-color);
+}
+.post__stat-value {
+  margin-left: 4px;
+  min-width: 40px;
+}
+.post__extras {
+  display: flex;
+  align-items: center;
+}
+.post__menu {
+  display: flex;
+}
+.post__comments {
+  padding: var(--padding-base);
+  border-bottom: var(--visible-border);
+  text-align: center;
+  background-color: var(--background-color);
+}

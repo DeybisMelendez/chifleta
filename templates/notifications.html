@@ -1,0 +1,47 @@
+{% extends "layouts/base.html" %}
+{% load static %}
+
+{% block title %}
+  Notificaciones
+{% endblock title %}
+
+{% block styles %}
+  <link rel="stylesheet" href="{% static 'css/notifications.css' %}">
+{% endblock styles %}
+
+{% block content %}
+<main>
+  <h1 class="notification-title">Notificaciones</h1>
+  {% for notification in notifications %}
+  {% if notification.notification_type == "like" %}
+  <div class="notification" @click="window.location.href = '{% url 'post' notification.post.id %}'">
+    <p class="notification__type"><strong>{{notification.follower}}</strong> indicó que le gusta tu post.
+      <span class="notification__date">{{notification.created_at}}</span>
+    </p>
+    <p class="notification__content">{{notification.post.content|truncatechars:50}}</p>
+  {% endif %}
+  {% if notification.notification_type == "follow" %}
+  <div class="notification" @click="window.location.href = '{% url 'user' notification.follower %}'">
+    <p class="notification__type"><strong>{{notification.follower}}</strong> comenzó a seguirte.
+      <span class="notification__date">{{notification.created_at}}</span>
+    </p>
+  {% endif %}
+  {% if notification.notification_type == "comment" %}
+  <div class="notification" @click="window.location.href = '{% url 'post' notification.post.id %}'">
+    <p class="notification__type"><strong>{{notification.post.profile}}</strong> te dejó un comentario.
+      <span class="notification__date">{{notification.created_at}}</span>
+      <p class="notification__content">{{notification.post.content|truncatechars:50}}</p>
+    </p>
+  {% endif %}
+  {% if notification.notification_type == "share" %}
+  <div class="notification" @click="window.location.href = '{% url 'post' notification.post.id %}'">
+    <p class="notification__type"><strong>{{notification.post.profile}}</strong> compartió tu post.
+      <span class="notification__date">{{notification.created_at}}</span>
+      <p class="notification__content">{{notification.post.content|truncatechars:50}}</p>
+    </p>
+  {% endif %}
+  
+  </div>
+  {% endfor %}
+</main>
+{% endblock content %}

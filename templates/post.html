@@ -1,0 +1,35 @@
+{% extends "layouts/base.html" %}
+{% load static %}
+
+{% block title %}
+  {{ post.profile }}
+{% endblock title %}
+
+{% block styles %}
+  <link rel="stylesheet" href="{% static 'css/posts.css' %}">
+{% endblock styles %}
+
+{% block content %}
+<main>
+  <section>
+  {% if parents %}
+    <div class="posts__parent">
+    {% for post in parents %}
+      {% include "includes/post.html" with is_node=True %}
+    {% endfor %}
+    </div>
+  {% endif %}
+
+  {% include "includes/post.html" with autofocus=True %}
+  <div class="post__comments">
+    Comentarios
+  </div>
+  {% if comments %}
+    {% for post in comments %}
+      {% include "includes/post.html" %}
+    {% endfor %}
+  {% endif %}
+  <div class="post__empty"></div>
+  </section>
+</main>
+{% endblock content %}

@@ -1,0 +1,12 @@
+.messages {
+  padding: var(--padding-base);
+  border-bottom: var(--visible-border);
+  color: var(--white-color);
+}
+.messages--error {
+  background-color: var(--error-color);
+}
+.messages__close {
+  float: right;
+  cursor: pointer;
+}

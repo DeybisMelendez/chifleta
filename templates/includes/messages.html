@@ -1,0 +1,13 @@
+{% if messages %}
+{% for message in messages %}
+<div class="messages messages--error" x-data="{open:true}" x-show="open">
+  <p class="messages__content">
+    <strong>Error:</strong>
+    {{ message }}
+    <span class="messages__close" @click="open = false">
+      <i class="material-icons">close</i>
+    </span>
+  </p>
+</div>
+{% endfor %}
+{% endif %}

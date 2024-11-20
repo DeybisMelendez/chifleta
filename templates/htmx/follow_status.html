@@ -1,0 +1,7 @@
+<button class="user__button" hx-post="{% url 'follow_status' username %}" hx-swap="outerHTML">
+{% if follow_status %}
+Dejar de seguir
+{% else %}
+Seguir
+{% endif %}
+</button>

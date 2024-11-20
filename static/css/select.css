@@ -1,0 +1,22 @@
+.select {
+  border-bottom: var(--visible-border);
+  display: flex;
+}
+
+.select__button {
+  padding: var(--padding-base);
+  width: 50%;
+  text-align: center;
+  transition: var(--transition-base);
+}
+.select__button:hover {
+  background-color: var(--background-hover-color);
+}
+
+.select__button--right-border {
+  border-right: var(--visible-border);
+}
+.select__button--actived {
+  background-color: var(--background-hover-color);
+  cursor: not-allowed;
+}

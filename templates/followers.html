@@ -1,0 +1,50 @@
+{% extends "layouts/base.html" %}
+{% load static %}
+
+{% block title %}
+  Seguidores
+{% endblock title %}
+
+{% block styles %}
+  <link rel="stylesheet" href="{% static 'css/select.css' %}">
+  <link rel="stylesheet" href="{% static 'css/followers.css' %}">
+{% endblock styles %}
+
+{% block content %}
+<main  x-data="{open:'followers'}">
+  <nav class="select">
+    <a
+      class="select__button select__button--right-border" @click="open='followers'" 
+      :class = "open=='followers' ? 'select__button--actived':''">
+      Seguidores
+    </a>
+    <a
+      class="select__button"
+      @click="open='following'"
+      :class = "open=='following' ? 'select__button--actived':''" >
+      Siguiendo
+    </a>
+  </nav>
+  <section x-show="open=='followers'">
+    {% if followers %}
+      {% for follow in followers %}
+        <div class="follower">
+          <a class="follower__user" href="{% url 'user' follow.follower %}">{{follow.follower}}</a>
+          <p class="follower__date">Te sigue desde {{follow.followed_at}}</p>
+        </div>
+      {% endfor %}
+    {% endif %}
+  </section>
+  <section x-show="open=='following'">
+    {% if following %}
+      {% for follow in following %}
+        <div class="follower">
+          <a class="follower__user" href="{% url 'user' follow.followed %}">{{follow.followed}}</a>
+          <p class="follower__date">Siguiendo desde {{follow.followed_at}}</p>
+        </div>
+      {% endfor %}
+    {% endif %}
+  </section>
+</main>
+
+{% endblock content %}

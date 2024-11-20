@@ -1,0 +1,52 @@
+{% extends "layouts/base.html" %}
+{% load static %}
+
+{% block title %}
+  Búsqueda
+{% endblock title %}
+
+{% block styles %}
+  <link rel="stylesheet" href="{% static 'css/posts.css' %}">
+  <link rel="stylesheet" href="{% static 'css/search.css' %}">
+  <link rel="stylesheet" href="{% static 'css/select.css' %}">
+{% endblock styles %}
+
+{% block content %}
+<main class="search" x-data="{open:'posts'}">
+  <section>
+    <h1 class="search__title">Resultado de Búsqueda</h1>
+    <nav class="select">
+      <a
+        class="select__button select__button--right-border"
+        @click="open='posts'"
+        :class = "open=='posts' ? 'select__button--actived':''" >
+        Posts
+      </a>
+      <a 
+        class="select__button" @click="open='profiles'" 
+        :class = "open=='profiles' ? 'select__button--actived':''">
+        Perfiles
+      </a>
+    </nav>
+  </section>
+  <section x-show="open=='posts'">
+    {% for post in posts %}
+      {% include "includes/post.html" %}
+    {% endfor %}
+  </section>
+  <section x-show="open=='profiles'">
+    {% for profile in profiles %}
+      <div class="profile">
+        <p class="profile__date">
+          Se unió {{profile.created_at}}
+        </p>
+        <a href="{% url 'user' profile.user %}" class="profile__user">{{profile.user.username}}</a>
+        <p class="profile__name">{{profile.user.first_name}} {{profile.user.last_name}}</p>
+        <p class="profile__bio">{{profile.bio}}</p>
+      </div>
+    {% endfor %}
+  </section>
+</main>
+
+
+{% endblock content %}

@@ -5,12 +5,25 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="{% static 'css/reset.css' %}">
+  <link rel="stylesheet" href="{% static 'css/base.css' %}">
+  <link rel="stylesheet" href="{% static 'css/nav.css' %}">
+  <link rel="stylesheet" href="{% static 'css/modal.css' %}">
+  <link rel="stylesheet" href="{% static 'css/form.css' %}">
+  <link rel="stylesheet" href="{% static 'css/messages.css' %}">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
+  {% block styles %}
+  {% endblock styles %}
+  <script src="//unpkg.com/alpinejs"></script>
   <title>{% block title %}{% endblock title %} - Chifleta</title>
-  <link rel="stylesheet" href="{% static 'css/style.css' %}">
 </head>
-<body>
-  {% block content %}{% endblock content %}
-  <script src="//unpkg.com/alpinejs" defer></script>
+<body hx-headers='{"X-CSRFToken": "{{ csrf_token }}"}'>
+  
+  <div class="container">
+    {% include "includes/nav.html" %}
+    {% block content %}{% endblock content %}
+    {% include "includes/footer.html" %}
+  </div>
   <script src="https://unpkg.com/htmx.org@2.0.3" defer></script>
 </body>
 </html>

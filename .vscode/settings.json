@@ -11,4 +11,7 @@
     "[javascript]": {
         "editor.tabSize": 2,
     },
+    "emmet.includeLanguages": {
+        "django-html": "html"
+    },
 }

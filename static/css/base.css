@@ -1,0 +1,48 @@
+:root {
+  color-scheme: light dark;
+  --visible-border: 2px solid light-dark(#abc,#789);
+  --padding-base: 20px;
+  --text-color: light-dark(#123,#cde);
+  --text-secondary-color: light-dark(#789,#abc);
+  --text-button-color: light-dark(#eee, #333);
+  --background-button-color: light-dark(#123,#cde);
+  --hover-button-color: light-dark(#234,#bcd);
+  --form-button-color: light-dark(#ddd,#222);
+  --background-main-color: light-dark(#ccc,#111);
+  --nav-background-color: light-dark(#dee, #334);
+  --footer-background-color: light-dark(#dee, #334);
+  --background-color: light-dark(#eee, #333);
+  --background-hover-color:light-dark( #ddd, #222);
+  --primary-color: #66e;
+  --secondary-color: #19e;
+  --error-color: #c55;
+  --alert-color: #c55;
+  --success-color: #5c5;
+  --transition-base: all 0.3s ease-in-out;
+}
+
+body {
+  background-color: var(--background-main-color);
+  /*background: linear-gradient(90deg, rgba(170,170,170,1) 0%, rgba(238,238,238,1) 100%);*/
+}
+
+.container {
+  max-width: 800px;
+  min-height: 100vh;
+  margin: auto;
+  border-left: var(--visible-border);
+  border-right: var(--visible-border);
+  display: flex;
+  flex-direction: column;
+}
+main {
+  flex: 1;
+}
+
+.footer {
+  padding: var(--padding-base);
+  display: flex;
+  align-items: end;
+  justify-content: center;
+  background-color: var(--background-color);
+}

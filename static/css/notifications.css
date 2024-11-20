@@ -1,0 +1,29 @@
+.notification-title {
+  padding: var(--padding-base);
+  border-bottom: var(--visible-border);
+  font-size: 2rem;
+  font-weight: 800;
+}
+.notification{
+  padding: var(--padding-base);
+  border-bottom: var(--visible-border);
+  transition: var(--transition-base);
+}
+.notification:hover {
+  cursor: pointer;
+  background-color: var(--background-hover-color);
+}
+
+.notification__type{
+  margin-bottom: 8px;
+}
+
+.notification__date{
+  font-weight: 200;
+}
+.notification__content{
+  background-color: var(--background-hover-color);
+  padding: 8px;
+  border-radius: 8px;
+  border: var(--visible-border)
+}
