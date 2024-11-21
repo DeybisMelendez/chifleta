@@ -42,7 +42,9 @@
         </p>
         <a href="{% url 'user' profile.user %}" class="profile__user">{{profile.user.username}}</a>
         <p class="profile__name">{{profile.user.first_name}} {{profile.user.last_name}}</p>
+        {%if profile.bio%}
         <p class="profile__bio">{{profile.bio}}</p>
+        {%endif%}
       </div>
     {% endfor %}
   </section>

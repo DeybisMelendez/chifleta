@@ -13,7 +13,7 @@
   --footer-background-color: light-dark(#dee, #334);
   --background-color: light-dark(#eee, #333);
   --background-hover-color:light-dark( #ddd, #222);
-  --primary-color: #66e;
+  --primary-color: light-dark(#66e,#55e);
   --secondary-color: #19e;
   --error-color: #c55;
   --alert-color: #c55;
