@@ -20,6 +20,19 @@
 
 .notification__date{
   font-weight: 200;
+  font-size: 0.75rem;
+}
+.notification__profile {
+  font-size: 1.2rem;
+  color: var(--text-color);
+  text-decoration: none;
+  font-weight: 800;
+  margin-right: 8px;
+  transition: var(--transition-base);
+}
+.notification__profile:hover {
+  color: var(--primary-color);
+  text-decoration: underline;
 }
 .notification__content{
   background-color: var(--background-hover-color);

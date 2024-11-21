@@ -22,7 +22,7 @@
         </button>
         {% if post.profile.user == request.user %}
         <a class="post__button" href="{% url 'delete_post' post.id %}" @click.stop="">
-          <i class="material-icons">delete</i>
+          <i class="material-icons post__delete">delete</i>
         </a>
         {% endif %}
       </div>

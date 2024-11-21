@@ -15,7 +15,7 @@
   {% for notification in notifications %}
   {% if notification.notification_type == "like" %}
   <div class="notification" @click="window.location.href = '{% url 'post' notification.post.id %}'">
-    <p class="notification__type"><strong>{{notification.follower}}</strong> indicó que le gusta tu post.
+    <p class="notification__type"><strong class="notification__profile" @click.stop = "window.location.href = '{% url 'user' notification.follower.user.username %}'">{{notification.follower}}</strong> indicó que le gusta tu post.
       <span class="notification__date">{{notification.created_at}}</span>
     </p>
     <p class="notification__content">{{notification.post.content|truncatechars:50}}</p>
@@ -27,15 +27,15 @@
     </p>
   {% endif %}
   {% if notification.notification_type == "comment" %}
-  <div class="notification" @click="window.location.href = '{% url 'post' notification.post.id %}'">
-    <p class="notification__type"><strong>{{notification.post.profile}}</strong> te dejó un comentario.
+  <div class="notification" @click.stop="window.location.href = '{% url 'post' notification.post.id %}'">
+    <p class="notification__type"><strong class="notification__profile" @click.stop = "window.location.href = '{% url 'user' notification.post.profile.user.username %}'">{{notification.post.profile}}</strong> te dejó un comentario.
       <span class="notification__date">{{notification.created_at}}</span>
       <p class="notification__content">{{notification.post.content|truncatechars:50}}</p>
     </p>
   {% endif %}
   {% if notification.notification_type == "share" %}
-  <div class="notification" @click="window.location.href = '{% url 'post' notification.post.id %}'">
-    <p class="notification__type"><strong>{{notification.post.profile}}</strong> compartió tu post.
+  <div class="notification" @click.stop="window.location.href = '{% url 'post' notification.post.id %}'">
+    <p class="notification__type"><strong class="notification__profile" @click.stop = "window.location.href = '{% url 'user' notification.post.profile.user.username %}'">{{notification.post.profile}}</strong> compartió tu post.
       <span class="notification__date">{{notification.created_at}}</span>
       <p class="notification__content">{{notification.post.content|truncatechars:50}}</p>
     </p>
