@@ -31,6 +31,7 @@
   border: 1px solid var(--text-secondary-color);
   transition: var(--transition-base);
   color: var(--text-color);
+  font-family: 'Courier New', Courier, monospace;
 }
 .form__submit {
   width: 100%;
